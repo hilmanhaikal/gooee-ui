@@ -1,6 +1,44 @@
 # Changelog
 
-What changed in Gooee UI (called hlmnhkl/ui until 0.40.0) for people who use it: components, blocks, templates, themes, tokens and the `npm run add` command. Newest first.
+What changed in Gooee UI (called hlmnhkl/ui until 0.40.0) for people who use it: components, blocks, templates, themes, tokens and the `npx gooee add` command. Newest first.
+
+## 1.3.0 · November 2026
+
+Photos can show a blurred preview while they load, in Lightbox, ImageCropper and VideoPlayer.
+
+### Highlights
+
+- **Lightbox** shows a blurred preview while each photo loads.
+- **ImageCropper** and **VideoPlayer** can show one too.
+- **Docs**: the React and Vue switch only shows where it changes something.
+
+### Added
+
+- Lightbox: `placeholder` on each image, a tiny image (usually a data URL). It shows blurred in the gallery thumbnail and in the viewer until the photo loads, then fades. New slot `lightbox-placeholder`.
+- ImageCropper: `placeholder`, shown blurred in the crop frame until the photo loads. New slot `image-cropper-placeholder`.
+- VideoPlayer: `posterPlaceholder`, shown blurred until the `poster` loads. New slot `video-player-poster-placeholder`.
+
+### Changed
+
+- The docs demos load their photos from gooee.dev, not from Picsum, and show a blurred preview while they load. The photos are still from Unsplash.
+- Avatar and AvatarGroup demos show real photos instead of a face drawn in code. React and Vue use the same three.
+- The React and Vue switch shows only on pages that change with it: components, Introduction, Installation and Forms.
+- Block and template pages say they are React only for now. Theme pages say they are plain CSS and work with both.
+- Introduction shows the Vue setup, the real output of the add command, and file names on each code block.
+- What's new has a place in the sidebar, under Resources, and `/whats-new` opens it.
+- "Motion without React" is now "Motion on its own", and the Tokens section "Without React" is now "Without the components", since Vue has its own components.
+- Only versions that reach npm are listed here. Docs, tools and notes changes wait under "Unreleased" and ship with the next version.
+- EventPage: the two roads on the map placeholder carry a note saying their angle draws the streets, so the design scan no longer flags them as tilted decoration.
+
+### Fixed
+
+- NotificationBell (Vue): the count badge was still cut in half, because the Badge's own styles won when they loaded last. The bell's rules now win in any load order.
+- Lightbox and VideoPlayer: if the photo or poster fails to load, the blurred preview goes away instead of staying.
+- Component pages: counts say "1 slot", "1 prop" and "1 note", not "1 slots".
+- Pro pages no longer show a source folder you cannot get. Free pages say where the code lands after add.
+- Glass lens: its page has an API section, which says it takes no props.
+- Theming said `npm run add`; the command is `npx gooee add`.
+- The script that copies the free parts to the public repo runs on Windows. It started TypeScript through `npx`, which Windows cannot start that way. It now runs TypeScript through Node directly.
 
 ## 1.2.0 · November 2026
 
