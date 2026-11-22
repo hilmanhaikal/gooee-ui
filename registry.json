@@ -3928,7 +3928,7 @@
       "name": "scroll-area",
       "type": "registry:item",
       "title": "ScrollArea",
-      "description": "Native scrolling with a thin drawn scrollbar that fades in while you scroll and widens when you reach for it.",
+      "description": "Native scrolling with a thin drawn scrollbar shaped like a drop: it stretches with scroll speed, squashes when it lands on an end, fades when idle and widens when you reach for it.",
       "registryDependencies": [
         "hilmanhaikal/gooee-ui/core"
       ],

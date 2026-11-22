@@ -17,6 +17,7 @@
 }
 
 .label {
+  text-wrap: balance;
   font-size: var(--gooee-text-sm);
   font-weight: var(--gooee-weight-medium);
 }

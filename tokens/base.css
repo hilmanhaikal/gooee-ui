@@ -5,6 +5,15 @@
   box-sizing: border-box;
 }
 
+/* Short text keeps even lines; running text never ends on one word. Browsers without text-wrap wrap as before. */
+:where(h1, h2, h3, h4, h5, h6, caption, figcaption, dt, label, legend, summary, th) {
+  text-wrap: balance;
+}
+
+:where(p, li, dd, td, blockquote) {
+  text-wrap: pretty;
+}
+
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;

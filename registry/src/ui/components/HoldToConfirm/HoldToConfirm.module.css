@@ -145,6 +145,7 @@
 .bud { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; z-index: 1; }
 
 .hint {
+  text-wrap: pretty;
   min-height: calc(round(nearest, var(--gooee-text-sm) * var(--gooee-leading-snug-ratio), 4px) * 2);
   margin: 0;
   color: var(--gooee-color-fg-muted);

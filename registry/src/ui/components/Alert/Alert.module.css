@@ -79,12 +79,14 @@
 }
 
 .title {
+  text-wrap: balance;
   margin: 0;
   font-weight: var(--gooee-weight-medium);
   line-height: var(--gooee-leading-snug);
 }
 
 .body {
+  text-wrap: pretty;
   font-size: var(--gooee-text-sm);
   color: var(--gooee-color-fg-muted);
   line-height: var(--gooee-leading-normal);

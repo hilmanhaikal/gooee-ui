@@ -142,6 +142,7 @@ button.main { cursor: pointer; }
 }
 
 .title {
+  text-wrap: balance;
   font-size: var(--gooee-text-sm);
   line-height: var(--gooee-leading-snug);
 }
@@ -149,6 +150,7 @@ button.main { cursor: pointer; }
 .row[data-status="unread"] .title { font-weight: var(--gooee-weight-semibold); }
 
 .body {
+  text-wrap: pretty;
   color: var(--gooee-color-fg-muted);
   font-size: var(--gooee-text-sm);
   line-height: var(--gooee-leading-snug);
@@ -205,12 +207,14 @@ button.main { cursor: pointer; }
 }
 
 .emptyTitle {
+  text-wrap: balance;
   margin: 0;
   font-size: var(--gooee-text-md);
   font-weight: var(--gooee-weight-semibold);
 }
 
 .emptyBody {
+  text-wrap: pretty;
   margin: 0;
   color: var(--gooee-color-fg-muted);
   font-size: var(--gooee-text-sm);

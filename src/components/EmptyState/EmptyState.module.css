@@ -29,6 +29,7 @@
 .icon > svg { animation: float calc(var(--gooee-motion-slower) * 6) var(--gooee-ease-in-out) infinite; }
 
 .title {
+  text-wrap: balance;
   margin: 0;
   font-size: var(--gooee-text-lg);
   font-weight: var(--gooee-weight-semibold);
@@ -39,6 +40,7 @@
 h1.title { font-size: var(--gooee-text-2xl); }
 
 .description {
+  text-wrap: pretty;
   margin: var(--gooee-space-3) 0 0;
   color: var(--gooee-color-fg-muted);
   font-size: var(--gooee-text-sm);

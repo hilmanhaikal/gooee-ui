@@ -93,9 +93,10 @@
   gap: var(--gooee-space-1);
 }
 
-.label { cursor: pointer; line-height: var(--gooee-leading-snug); }
+.label { text-wrap: balance; cursor: pointer; line-height: var(--gooee-leading-snug); }
 
 .description {
+  text-wrap: pretty;
   font-size: var(--gooee-text-sm);
   color: var(--gooee-color-fg-muted);
 }

@@ -103,6 +103,7 @@
 }
 
 .title {
+  text-wrap: balance;
   margin: 0;
   font-size: var(--gooee-text-xl);
   font-weight: var(--gooee-weight-semibold);
@@ -111,6 +112,7 @@
 }
 
 .description {
+  text-wrap: pretty;
   margin: 0;
   color: var(--gooee-color-fg-muted);
   line-height: var(--gooee-leading-snug);
@@ -145,6 +147,7 @@
 .close:focus-visible { outline: none; box-shadow: var(--gooee-focus-ring); }
 
 .body {
+  text-wrap: pretty;
   flex: 1;
   min-height: 0;
   overflow-y: auto;

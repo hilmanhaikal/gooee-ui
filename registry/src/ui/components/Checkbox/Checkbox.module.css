@@ -107,6 +107,7 @@
 }
 
 .label {
+  text-wrap: balance;
   font-size: var(--gooee-text-md);
   line-height: var(--gooee-leading-snug);
   cursor: pointer;
@@ -115,6 +116,7 @@
 .root[data-disabled] .label { cursor: not-allowed; }
 
 .description {
+  text-wrap: pretty;
   margin-top: var(--gooee-space-1);
   font-size: var(--gooee-text-sm);
   color: var(--gooee-color-fg-muted);

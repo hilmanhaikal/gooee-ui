@@ -8,6 +8,7 @@
 }
 
 .legend {
+  text-wrap: balance;
   padding: 0;
   margin-bottom: var(--gooee-space-2);
   font-size: var(--gooee-text-sm);
@@ -15,6 +16,7 @@
 }
 
 .groupDescription {
+  text-wrap: pretty;
   margin: 0 0 var(--gooee-space-2);
   font-size: var(--gooee-text-sm);
   color: var(--gooee-color-fg-muted);
@@ -97,11 +99,13 @@
 }
 
 .label {
+  text-wrap: balance;
   line-height: var(--gooee-leading-snug);
   cursor: pointer;
 }
 
 .description {
+  text-wrap: pretty;
   font-size: var(--gooee-text-sm);
   color: var(--gooee-color-fg-muted);
   line-height: var(--gooee-leading-snug);

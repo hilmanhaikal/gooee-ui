@@ -62,6 +62,7 @@
 .fill > .body { flex: 1; }
 
 .title {
+  text-wrap: balance;
   margin: 0;
   font-size: var(--gooee-text-lg);
   font-weight: var(--gooee-weight-semibold);
@@ -70,6 +71,7 @@
 }
 
 .description {
+  text-wrap: pretty;
   margin: 0;
   color: var(--gooee-color-fg-muted);
   font-size: var(--gooee-text-sm);

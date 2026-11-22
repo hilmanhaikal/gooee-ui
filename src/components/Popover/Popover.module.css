@@ -39,6 +39,7 @@
 }
 
 .title {
+  text-wrap: balance;
   margin: 0;
   font-size: var(--gooee-text-md);
   font-weight: var(--gooee-weight-semibold);
@@ -73,6 +74,7 @@
 .close:focus-visible { outline: none; box-shadow: var(--gooee-focus-ring); }
 
 .body {
+  text-wrap: pretty;
   font-size: var(--gooee-text-sm);
   color: var(--gooee-color-fg-muted);
   line-height: var(--gooee-leading-normal);

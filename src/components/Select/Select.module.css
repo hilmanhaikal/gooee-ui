@@ -6,6 +6,7 @@
 }
 
 .label {
+  text-wrap: balance;
   margin-bottom: var(--gooee-space-3);
   font-size: var(--gooee-text-sm);
   font-weight: var(--gooee-weight-medium);
@@ -184,6 +185,7 @@
 }
 
 .hint {
+  text-wrap: pretty;
   font-size: var(--gooee-text-xs);
   color: var(--gooee-color-fg-muted);
 }

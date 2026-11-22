@@ -7,6 +7,7 @@
 }
 
 .legend {
+  text-wrap: balance;
   padding: 0;
   margin-bottom: var(--gooee-space-2);
   font-size: var(--gooee-text-sm);
@@ -14,6 +15,7 @@
 }
 
 .description {
+  text-wrap: pretty;
   margin: 0 0 var(--gooee-space-2);
   font-size: var(--gooee-text-sm);
   color: var(--gooee-color-fg-muted);

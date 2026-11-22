@@ -41,6 +41,7 @@
 }
 
 .caption {
+  text-wrap: balance;
   padding: var(--gooee-space-5) var(--gooee-space-5) var(--gooee-space-3);
   font-size: var(--gooee-text-md);
   font-weight: var(--gooee-weight-semibold);

@@ -58,10 +58,20 @@
     background-color var(--gooee-motion-fast) var(--gooee-ease-morph);
 }
 
+/* The thumb stays slim, but its hit area is 44px across, reaching in from the area's edge. */
+.thumb::after { content: ""; position: absolute; }
+.track[data-orientation="vertical"] .thumb::after { inset: 0 calc(var(--gooee-space-1) * -1) 0 auto; width: var(--gooee-hit-min); }
+.track[data-orientation="horizontal"] .thumb::after { inset: auto 0 calc(var(--gooee-space-1) * -1) 0; height: var(--gooee-hit-min); }
+
 .track[data-orientation="vertical"] .thumb { width: var(--gooee-scroll-area-bar-w, 6px); left: auto; right: var(--gooee-space-1); }
 .track[data-orientation="horizontal"] .thumb { height: var(--gooee-scroll-area-bar-w, 6px); top: auto; bottom: var(--gooee-space-1); }
 
-.root[data-dragging] .track[data-orientation="vertical"] .thumb { width: var(--gooee-scroll-area-bar-w-active, 10px); }
+.root[data-dragging] /* The thumb stays slim, but its hit area is 44px across, reaching in from the area's edge. */
+.thumb::after { content: ""; position: absolute; }
+.track[data-orientation="vertical"] .thumb::after { inset: 0 calc(var(--gooee-space-1) * -1) 0 auto; width: var(--gooee-hit-min); }
+.track[data-orientation="horizontal"] .thumb::after { inset: auto 0 calc(var(--gooee-space-1) * -1) 0; height: var(--gooee-hit-min); }
+
+.track[data-orientation="vertical"] .thumb { width: var(--gooee-scroll-area-bar-w-active, 10px); }
 .root[data-dragging] .track[data-orientation="horizontal"] .thumb { height: var(--gooee-scroll-area-bar-w-active, 10px); }
 
 .root[data-dragging] .thumb { background: var(--gooee-color-fg-muted); cursor: grabbing; }

@@ -109,6 +109,7 @@
 }
 
 .title {
+  text-wrap: balance;
   margin: 0;
   font-size: var(--gooee-text-md);
   font-weight: var(--gooee-weight-medium);
@@ -116,6 +117,7 @@
 }
 
 .description {
+  text-wrap: pretty;
   margin: var(--gooee-space-1) 0 0;
   font-size: var(--gooee-text-sm);
   color: var(--gooee-color-fg-muted);
