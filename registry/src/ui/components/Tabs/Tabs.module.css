@@ -46,7 +46,7 @@
 }
 
 /* Narrow screens: a little less room around each tab, so a short row fits instead of scrolling. */
-@media (max-width: 479px) {
+@media (max-width: 599px) {
   .tab { padding: 0 var(--gooee-space-3); }
 }
 

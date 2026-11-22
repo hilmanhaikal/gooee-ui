@@ -67,7 +67,7 @@ export function Dialog({
     panelRef,
     open,
     () => onOpenChange(false),
-    (e) => window.matchMedia('(max-width: 520px)').matches && !!(e.target as HTMLElement).closest(`.${styles.handle}, .${styles.header}`),
+    (e) => window.matchMedia('(max-width: 599px)').matches && !!(e.target as HTMLElement).closest(`.${styles.handle}, .${styles.header}`),
   )
 
   useScrollLock(open)

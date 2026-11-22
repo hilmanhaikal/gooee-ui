@@ -161,7 +161,7 @@
   border-top: var(--gooee-line) solid var(--gooee-color-border);
 }
 
-@media (min-width: 521px) {
+@media (min-width: 600px) {
   .footer { flex-direction: row; justify-content: flex-end; }
 }
 

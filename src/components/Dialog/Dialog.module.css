@@ -138,7 +138,7 @@
 .body:last-child { padding-bottom: var(--gooee-space-7); }
 
 /* Phones: dock to the bottom, inside thumb reach. */
-@media (max-width: 520px) {
+@media (max-width: 599px) {
   .positioner {
     place-items: end stretch;
     padding: 0;

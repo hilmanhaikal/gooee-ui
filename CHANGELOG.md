@@ -2,9 +2,41 @@
 
 What changed in Gooee UI (called hlmnhkl/ui until 0.40.0) for people who use it: components, blocks, templates, themes, tokens and the `npm run add` command. Newest first.
 
-## 1.1.0 · 21 Nov 2026
+## 1.2.0 · November 2026
+
+Components, blocks and templates now share the same five screen breakpoints.
+
+### Highlights
+
+- **Five breakpoints** everywhere: phone, tablet, laptop, desktop and wide.
+- **NotificationBell** shows its full count again.
+- **What's new** shows highlights, grouped by month.
+
+### Changed
+
+- Components, blocks and templates switch layout at the five breakpoints: phone up to 599px, tablet from 600px, laptop from 900px, desktop from 1280px and wide from 1600px. Before, they switched at 15 different widths (420px to 1080px). So a layout may now change a little earlier or later than before. For example, side panels in blocks and templates now fold at 899px, not 768px, and the Schedule side panel shows from 1280px. The Schedule block keeps one extra rule below 360px for the smallest phones. The same widths apply in JavaScript: Dialog's drag to close, DatePicker's sheet, Tour, TeamMembers and DateRangePicker's two months.
+- What's new shows each version's summary and up to three highlights. Breaking changes get their own line, and the full list opens under "All changes". Each version in this file now starts with a short `### Highlights` section.
+- What's new groups versions by month, and this file gives each version its month.
+- The docs site uses five breakpoints: phone (up to 599px), tablet (600px), laptop (900px), desktop (1280px) and wide (1600px). Before, pages switched at 17 different widths. On a wide screen, the page and "On this page" now sit in the middle of the sheet. DESIGN.md lists the five.
+
+### Fixed
+
+- NotificationBell: the count badge was squeezed to the width of the bell icon, so "3" was cut in half. It is now a round 20px badge that grows for "99+".
+- DataGrid demo: the Freight and Charge (RM) headers were cut off. Their columns are now 8px wider.
+- Tokens: the motion demo showed "NaNms" for every duration, and cut off the longer token names. It now shows each real time (0ms with reduced motion on) and the full names and easing curves.
+- The Docs and Resources menus: descriptions used the body text's line height, so their lines sat far apart. They are now set for their own size, with the title close to its description.
+- What's new: the breaking changes triangle sits on the text line, and its link uses the docs link style.
+- On a 320px phone, the bottom bar was wider than the screen. It now keeps a margin on both sides, and the page name shortens first.
+
+## 1.1.0 · November 2026
 
 Every field now works in real forms, with form libraries and server actions, plus a new Form part.
+
+### Highlights
+
+- **Form** shows server errors under each field, by name.
+- **About 30 fields** work with plain forms, react-hook-form, vee-validate and server actions.
+- **DatePicker** says why a date can't be picked.
 
 ### Added
 
@@ -31,9 +63,15 @@ Every field now works in real forms, with form libraries and server actions, plu
 - Combobox no longer turns an empty value into `null`. RangeSlider and DateRangePicker no longer send their values while disabled.
 - Vue MentionInput: a form reset went back to the last text instead of the first.
 
-## 1.0.1 · 21 Nov 2026
+## 1.0.1 · November 2026
 
 Three fixes for long lists, dates typed on a phone and checkboxes in form libraries.
+
+### Highlights
+
+- **Select and menus** show every option at once in a long list.
+- **DatePicker** takes a date typed as digits only, on iPhone too.
+- **Checkbox and Slider** work with react-hook-form's `register`.
 
 ### Fixed
 
@@ -41,9 +79,15 @@ Three fixes for long lists, dates typed on a phone and checkboxes in form librar
 - DatePicker and DateRangePicker: a date could not be typed on an iPhone. Its number pad has no "/", and the field needed one. Digits alone now work in the locale's order: 23112026 or 231126, and 16 or 12 digits for a range. The separators appear as you type, so the field shows 23/11/2026.
 - Checkbox and Slider (React): an `onChange` from a form library, such as react-hook-form's `register`, replaced the part's own, so the box stayed stuck. SearchInput ignored it. Each now updates first, then calls your `onChange` with the change event.
 
-## 1.0.0 · 21 Nov 2026
+## 1.0.0 · November 2026
 
 The stable release, with names, tokens and styling hooks you can rely on.
+
+### Highlights
+
+- **Every part** has styling hooks: `data-slot` and one set of state attributes.
+- **Cascade layers** let your CSS and Tailwind win without `!important`.
+- **Every part with fixed text** takes one `labels` prop.
 
 ### What 1.0 promises
 
@@ -87,15 +131,20 @@ The stable release, with names, tokens and styling hooks you can rely on.
 
 - DateWheel: turning past a shorter month on the way to a longer one kept the day short (31 May could become 30 May). The day column now follows the month it rests on.
 
-## 0.52.0 · 17 Nov 2026
+## 0.52.0 · November 2026
 
 The MCP server gives Vue install steps too.
+
+### Highlights
+
+- **gooee-mcp** gives Vue install steps with `framework: "vue"`.
+- **get_component** shows the Vue import line next to the React one.
 
 ### Added
 
 - gooee-mcp: `get_install_steps` takes `framework: "vue"` and answers with `init --vue`, `add <names> --vue` and an import line for each `.vue` file (Tabs gives Tabs, TabList, Tab and TabPanel). `get_component` and `llms-full.txt` show the Vue import line next to the React one.
 
-## 0.51.2 · 17 Nov 2026
+## 0.51.2 · November 2026
 
 Docs site only. No changes to the library.
 
@@ -104,7 +153,7 @@ Docs site only. No changes to the library.
 - Homepage: the curl draws its loop beside the card again at 1440 wide. Since the content grew to 1360px, the card sat 5px further right, and none of the loop's fitted shapes fit there. Each shape may now move 4px left or right to fit, which also fills the same gap at 1490 wide.
 - Homepage: the news banner shows the newest release that changed the parts, so a docs-only version never fills it with "Docs site only".
 
-## 0.51.1 · 17 Nov 2026
+## 0.51.1 · November 2026
 
 Docs and package description only. No changes to the components.
 
@@ -112,9 +161,15 @@ Docs and package description only. No changes to the components.
 
 - The README, the npm description, `llms.txt` and the MCP server now say what Gooee UI is: React and Vue components. The README shows how to add a Vue part with `--vue`, and lists Nuxt.
 
-## 0.51.0 · 17 Nov 2026
+## 0.51.0 · November 2026
 
 Every part now comes in Vue too: all 151 components, with the same look, motion, keys and accessibility as React.
+
+### Highlights
+
+- **Vue 3.5** versions of all 151 components, with the same look as React.
+- **The CLI** copies Vue parts with `add <part> --vue` and sets up an app with `init --vue`.
+- **Nuxt** pages can render the Vue parts on the server.
 
 ### Added
 
@@ -133,9 +188,14 @@ Every part now comes in Vue too: all 151 components, with the same look, motion,
 - Tabs: in light mode the panel and the chosen tab were almost the colour of the page, so you could not see them. They now use `--gooee-tabs-panel`, the pressed grey in light. Dark is unchanged.
 - DataGrid, Table and CalendarHeatmap (table view): the frame's lines showed again beside the rows and over the sticky head. The rows were painting over them. The frame is now a layer on top that takes no clicks.
 
-## 0.50.0 · 17 Nov 2026
+## 0.50.0 · November 2026
 
 The motion now works without React: a new package, gooee-motion.
+
+### Highlights
+
+- **gooee-motion** is the parts' motion as plain JavaScript.
+- **It works** in Vue, Svelte, Angular, plain HTML or React, with no dependencies.
 
 ### Added
 
@@ -145,26 +205,41 @@ The motion now works without React: a new package, gooee-motion.
 
 - The parts' motion hooks now hold these plain functions, in `internal/motion/`. They behave as before, and `npx gooee add` copies the plain file with each hook.
 
-## 0.49.0 · 16 Nov 2026
+## 0.49.0 · November 2026
 
 HoldToConfirm's cancel button arrives sooner, and the docs homepage opens far faster on a phone.
+
+### Highlights
+
+- **HoldToConfirm** cancel button grows in 400 ms, not 600 ms.
+- **LivePill** `label` guidance now helps voice control find it.
 
 ### Changed
 
 - HoldToConfirm: the ✕ that cancels grows in and out in 400 ms (`--gooee-motion-reveal`), not the 600 ms morph, so it is there as soon as you start holding.
 - LivePill: the `label` guidance now says to start the name with the words the pill shows, such as "City map 63%, download", so voice control can find it by what people see.
 
-## 0.48.0 · 16 Nov 2026
+## 0.48.0 · November 2026
 
 The look now works without React: a new package, gooee-tokens.
+
+### Highlights
+
+- **gooee-tokens** gives every token and the page reset as plain CSS.
 
 ### Added
 
 - `gooee-tokens`: every token and the small page reset as plain CSS, for Vue, Svelte, Angular, plain HTML or React. `npm i gooee-tokens`, then `@import "gooee-tokens";`. `gooee-tokens/tokens.css` is the tokens alone. Light and dark follow the system or `data-theme`.
 
-## 0.47.0 · 16 Nov 2026
+## 0.47.0 · November 2026
 
 Every bordered box is a whole number of 4px steps tall, and a few sizes move onto the grid.
+
+### Highlights
+
+- **Bordered boxes** are a whole number of 4px steps tall.
+- **Switch** track is 28px tall and the thumb sits 4px in.
+- **Badge** is 24px tall.
 
 ### Changed
 
@@ -179,9 +254,15 @@ Every bordered box is a whole number of 4px steps tall, and a few sizes move ont
 - Switch: the off thumb no longer shows a sliver of the on colour at its edge.
 - LivePill: the shut ring's edge is no longer cut off in Safari.
 
-## 0.46.0 · 16 Nov 2026
+## 0.46.0 · November 2026
 
 Every bordered part lands on the 4px grid, and the docs gain a Golden grid page.
+
+### Highlights
+
+- **Bordered parts** count their line inside their padding, so edges land on the grid.
+- **SegmentedControl, ToggleGroup, Toolbar and Menubar** items sit 4px in.
+- **Dial** arc turns with a finger instead of scrolling the page.
 
 ### Changed
 
@@ -194,18 +275,29 @@ Every bordered part lands on the 4px grid, and the docs gain a Golden grid page.
 
 - Dial, arc: a finger following the curve turns it instead of scrolling the page. A plain up or down swipe still scrolls.
 
-## 0.45.1 · 16 Nov 2026
+## 0.45.1 · November 2026
 
 Whole pixels in Safari and Firefox too.
+
+### Highlights
+
+- **Prose** inline `code` no longer makes its line taller in Safari and Firefox.
+- **WeekSchedule** day headers keep a whole pixel height in Safari and Firefox.
 
 ### Fixed
 
 - Prose: inline `code` no longer makes its line a fraction of a pixel taller in Safari and Firefox.
 - WeekSchedule: the day headers no longer come out a fraction of a pixel tall in Safari and Firefox.
 
-## 0.45.0 · 16 Nov 2026
+## 0.45.0 · November 2026
 
 LivePill shows progress with a ring, the way uploads and downloads look across the web.
+
+### Highlights
+
+- **LivePill** shows progress with a ring that grows to 44px when open.
+- **LivePill** `status` has `"done"` and `"stopped"`.
+- **LivePill** `align` puts the pill at the start of its row.
 
 ### Added
 
@@ -218,9 +310,15 @@ LivePill shows progress with a ring, the way uploads and downloads look across t
 - LivePill's card is only as wide as its words, up to the row, instead of always the full row.
 - LivePill measures in CSS pixels, so a page that scales its content while it loads no longer leaves the pill's shape off its spot.
 
-## 0.44.0 · 16 Nov 2026
+## 0.44.0 · November 2026
 
 The golden grid: every part measured to the whole pixel, sized by the golden ratio. ThemeToggle morphs and reveals the new theme from the button.
+
+### Highlights
+
+- **Text sizes** follow a golden scale, and body text is now 16px.
+- **Line heights** land on whole pixels.
+- **ThemeToggle** morphs the sun into the moon and reveals the new theme from the button.
 
 ### Changed
 
@@ -235,9 +333,15 @@ The golden grid: every part measured to the whole pixel, sized by the golden rat
 - Inline code in Prose is 13px, and AssistantThread answers and empty states give headings a real size.
 - ThemeToggle: one shape morphs from the sun to the moon (the disc grows and a bite slides over it), starting the moment it is pressed. The new theme then grows from the button in a circle over the screen, in 400ms. `reveal={false}` turns the circle off; reduced motion switches at once. New token: `--gooee-motion-reveal`.
 
-## 0.43.0 · 16 Nov 2026
+## 0.43.0 · November 2026
 
 Tabs gets a new look: the panel rises into the chosen tab. HoldToConfirm's tap step stays one row, and SwipeActions keeps its More button clear of the row's words.
+
+### Highlights
+
+- **Tabs** have a new look: the panel rises into the chosen tab.
+- **HoldToConfirm** turns red in place and buds out a round cancel button.
+- **SwipeActions** keeps room for its More button.
 
 ### Changed
 
@@ -247,9 +351,14 @@ Tabs gets a new look: the panel rises into the chosen tab. HoldToConfirm's tap s
 - SwipeActions: the row keeps room for its More button, so the button no longer covers the row's own trailing words, such as an amount.
 - HoldToConfirm: `confirmLabel` is now the verb in the step's line ("Press it again to delete, or Cancel.") instead of a button's text, and `cancelLabel` names the round cancel button. Your values keep working.
 
-## 0.42.0 · 15 Nov 2026
+## 0.42.0 · November 2026
 
 Picking an option now moves at the morph's pace, and every thumb casts one soft shadow.
+
+### Highlights
+
+- **`--gooee-shadow-thumb`** gives every thumb one soft shadow.
+- **SegmentedControl, Tabs and ToggleGroup** move in 400 ms, on the morph's times.
 
 ### Added
 
@@ -262,17 +371,27 @@ Picking an option now moves at the morph's pace, and every thumb casts one soft 
 - While a part flows (SegmentedControl, Tabs, Toast), its drawn shape casts the same shadow as the part at rest. Before, the shadows were chained, so each shadow also shadowed the one before it and the drawing came out darker.
 - The installation guide has a shadcn CLI tab.
 
-## 0.41.1 · 15 Nov 2026
+## 0.41.1 · November 2026
 
 The docs live at gooee.dev now.
+
+### Highlights
+
+- **Docs** moved to gooee.dev, and every page keeps its path.
 
 ### Changed
 
 - The docs moved to **gooee.dev** (from ui.hlmnhkl.my). Every page keeps its path, so `ui.hlmnhkl.my/button` is `gooee.dev/button`. The CLI, the README, the npm page, the MCP server and the share card point there.
 
-## 0.41.0 · 15 Nov 2026
+## 0.41.0 · November 2026
 
 hlmnhkl/ui is now Gooee UI, and every morph lifts off softly instead of popping.
+
+### Highlights
+
+- **Gooee UI** is the new name, with the packages `gooee` and `gooee-mcp`.
+- **Tokens** and data attributes now start with `gooee` instead of `hl`.
+- **Morphs** lift off softly with a new `--gooee-ease-morph` curve.
 
 ### Changed
 
@@ -281,9 +400,15 @@ hlmnhkl/ui is now Gooee UI, and every morph lifts off softly instead of popping.
 - ThemeToggle: the default `storageKey` is `gooee-theme` instead of `hl-theme`. Pass `storageKey="hl-theme"` to keep a visitor's saved theme.
 - The morph curve, `--gooee-ease-morph`, is now `cubic-bezier(0.2, 0, 0, 1)`: a soft lift-off, then a long settle. The old curve did half of every move in its first 96 ms, so a 600 ms open felt like a 220 ms pop. Opening still takes 600 ms; closing, `--gooee-motion-morph-out`, now takes 400 ms instead of 480 ms.
 
-## 0.40.0 · 15 Nov 2026
+## 0.40.0 · November 2026
 
 AI chat parts that grow from the spot you touch, and every free part installs through the shadcn CLI.
+
+### Highlights
+
+- **AssistantThread, PromptBar, WorkPill and SourceMark** are new Pro parts for AI chat.
+- **Free parts** install through the shadcn CLI.
+- **Button** no longer spills out of its edge when its label changes.
 
 ### Added
 
@@ -303,9 +428,15 @@ AI chat parts that grow from the spot you touch, and every free part installs th
 - Button: a label that changes while the pointer is on the button (such as "Fill it" becoming "Empty it" on click) no longer spills out of the soft edge. The edge now redraws to the button's new size.
 - Docs in Safari: after Escape closes a top bar menu opened by a click, focus goes to the menu's button.
 
-## 0.39.0 · 15 Nov 2026
+## 0.39.0 · November 2026
 
 Every part works without a drag, focus never hides under a bar, and parts say when they are loading, empty or failed.
+
+### Highlights
+
+- **Table, DataGrid, Select and Combobox** show loading, empty and failed states.
+- **Nine parts** that needed a drag now have a tap or click way too.
+- **Button and DropdownMenu items** say why they are off with `disabledReason`.
 
 ### Added
 
@@ -330,9 +461,15 @@ Every part works without a drag, focus never hides under a bar, and parts say wh
 - Docs on a phone: the menu's Components and Blocks tabs list every part by group, one tap each, and the menu opens on the tab of the page you are on, scrolled to it. So another part is two taps away (Menu, then the part).
 - Docs sidebar: rows are tighter (30px, the tap area stays 44px), with a small gap between them and corners that fit the shorter row.
 
-## 0.38.0 · 10 Nov 2026
+## 0.38.0 · November 2026
 
 104 icons that can move, Pro blocks you can try, and docs that are quicker to get around.
+
+### Highlights
+
+- **Icons** grow to 104, all drawn for this library.
+- **Icons** can move with `animated` when pointed at or focused.
+- **Docs** run Pro blocks, templates and themes live, with the code locked.
 
 ### Added
 
@@ -347,17 +484,26 @@ Every part works without a drag, focus never hides under a bar, and parts say wh
 - Docs: one Pro label everywhere, with a soft sheen.
 - Docs and the MCP server: components sit in 10 groups instead of 12. Forms splits into Text fields and Choices and pickers (which now holds the date and time pickers); Charts and Communication join Data display; HoverCard moves to Overlays. Old group links (such as `/components?group=Charts`) open the group the parts moved to.
 
-## 0.37.2 · 10 Nov 2026
+## 0.37.2 · November 2026
 
 Fields stay above a phone keyboard.
+
+### Highlights
+
+- **Fields** that a part focuses no longer hide under a phone keyboard.
 
 ### Fixed
 
 - Phone keyboards: a field a part focuses for you (a MorphButton's note, a Sheet's or Dialog's first field) no longer hides under the keyboard. The page scrolls just enough, or a fixed sheet or dialog lifts above the keyboard and drops back when it closes. New internal file `keyboard.ts`, used by `focus.ts`; a layer that places itself can opt out with `data-own-keyboard`.
 
-## 0.37.1 · 10 Nov 2026
+## 0.37.1 · November 2026
 
 The switch moves as one soft pill, and folding panels leave nothing behind.
+
+### Highlights
+
+- **Switch** thumb stretches across as one soft pill.
+- **Popover, Dialog and Tooltip** leave no strip behind when they fold.
 
 ### Changed
 
@@ -367,9 +513,15 @@ The switch moves as one soft pill, and folding panels leave nothing behind.
 
 - Popover, Dialog, Tooltip and other parts that fold back into their trigger: the panel fades as it folds, so no strip of it is left by the trigger at the end of the close.
 
-## 0.37.0 · 9 Nov 2026
+## 0.37.0 · November 2026
 
 Parts move like soft liquid. A button gives under your finger, a switch sends a drop ahead, menus follow you with a bead, and a toast rises out of the screen.
+
+### Highlights
+
+- **Button** has a soft edge that dents under your finger.
+- **Switch** sends a drop ahead of the thumb.
+- **Toast** rises out of the screen edge as a drop.
 
 ### Changed
 
@@ -386,9 +538,15 @@ Parts move like soft liquid. A button gives under your finger, a switch sends a 
 - MorphButton: the panel opens toward the side that fits inside the box it sits in, so a demo or a card never cuts it off.
 - DropdownMenu, ContextMenu and Menubar: the hover fill is a bead that follows the pointer and the arrow keys. The next item settles in about 100ms; a jump of two or more stretches a short neck. Keyboard and screen reader use are unchanged.
 
-## 0.36.0 · 9 Nov 2026
+## 0.36.0 · November 2026
 
 Every part now moves on one morph curve. Things grow from where you tapped, and closing is as quick as opening.
+
+### Highlights
+
+- **Every part** moves on one morph curve, `--hl-ease-morph`.
+- **Dialog** grows out of the button that opened it, and is a bottom sheet on a phone.
+- **Closing** moves from its first frame instead of starting slow.
 
 ### Added
 
@@ -417,7 +575,7 @@ Every part now moves on one morph curve. Things grow from where you tapped, and 
 
 - Tokens `--hl-magnet-reach` and `--hl-magnet-strong`, since nothing pulls any more.
 
-## 0.35.3 · 9 Nov 2026
+## 0.35.3 · November 2026
 
 Docs site only. No changes to the library.
 
@@ -425,17 +583,27 @@ Docs site only. No changes to the library.
 
 - Installation: a short section on adding parts to an app that already has a design system, and the three tokens that make them match it.
 
-## 0.35.2 · 9 Nov 2026
+## 0.35.2 · November 2026
 
 A smoother throw in SwipeDeck.
+
+### Highlights
+
+- **SwipeDeck** no longer shows a thrown card in the middle for a frame.
+- **Pass and Save** button fill fades out after a throw.
 
 ### Fixed
 
 - SwipeDeck: a thrown card no longer shows in the middle for a frame before the next card appears, and the Pass or Save button's fill now fades out after a throw instead of switching off at once. While you drag it still follows your finger, and with reduced motion it switches off at once.
 
-## 0.35.1 · 9 Nov 2026
+## 0.35.1 · November 2026
 
 A clearer first step, and a safe way to take outside pull requests.
+
+### Highlights
+
+- **`init`** says where to paste the two CSS imports.
+- **The public repo** takes pull requests for free components, with a check on each.
 
 ### Fixed
 
@@ -445,9 +613,15 @@ A clearer first step, and a safe way to take outside pull requests.
 
 - The public repo takes pull requests for free components. A check runs on each one, and the package refuses to publish with dependencies, install scripts or files it does not list. See CONTRIBUTING.md.
 
-## 0.35.0 · 7 Nov 2026
+## 0.35.0 · November 2026
 
 Three live parts: a pill that grows into a card, a deck you throw, and a board that flips.
+
+### Highlights
+
+- **LivePill** is a status pill that grows into a card from its own spot.
+- **SwipeDeck** is a stack of cards you throw to either side to decide.
+- **SplitFlap** flips letters and numbers into place like a station board.
 
 ### Added
 
@@ -460,13 +634,19 @@ Three live parts: a pill that grows into a card, a deck you throw, and a board t
 
 - SegmentedControl: on touch screens every segment is now 44px tall at `sm` and `md`, so the box itself is the target. On a desktop it looks the same as before.
 
-## 0.34.1 · 7 Nov 2026
+## 0.34.1 · November 2026
 
 Tests only. No changes to the library.
 
-## 0.34.0 · 7 Nov 2026
+## 0.34.0 · November 2026
 
 Three ways to set a value by hand. Each one is drawn onto its marks, coasts after a flick and settles without a bounce.
+
+### Highlights
+
+- **Dial** sets a value by turning a round dial, in three looks.
+- **RulerScrubber** sets a number by dragging a ruler under a needle.
+- **PickerWheel** is a 3D wheel for any list, with TimeWheel and DateWheel on top.
 
 ### Added
 
@@ -488,13 +668,19 @@ Three ways to set a value by hand. Each one is drawn onto its marks, coasts afte
 - WeekSchedule: on hover an event keeps its fill, lifts and gets a clear edge. The now line and today are in the accent colour.
 - WeekSchedule: focus stays in the schedule when its day stops showing, and with a few days shown the panel is named for the date range. `--hl-schedule-indent` is no longer used.
 
-## 0.33.1 · 7 Nov 2026
+## 0.33.1 · November 2026
 
 Docs site only. No changes to the library.
 
-## 0.33.0 · 6 Nov 2026
+## 0.33.0 · November 2026
 
 Three new ways to act, and more ways to lay out the tab bar.
+
+### Highlights
+
+- **HoldToConfirm** runs a risky action when you press and hold.
+- **MorphButton** grows into its own panel from where it sits.
+- **Sheet** `detents` let it rest at low, half or full height.
 
 ### Added
 
@@ -512,25 +698,39 @@ Three new ways to act, and more ways to lay out the tab bar.
 
 - BottomTabBar: the chosen tab is marked by full ink and its icon hops once, with no pill behind it. The bar is 56px tall (`--hl-tabbar-h`), down from 64px.
 
-## 0.32.3 · 6 Nov 2026
+## 0.32.3 · November 2026
 
 Docs site only. No changes to the library.
 
-## 0.32.2 · 5 Nov 2026
+## 0.32.2 · November 2026
+
+### Highlights
+
+- **Sheet** stretches when pulled up past the top, and never opens a gap.
 
 ### Changed
 
 - Sheet: pulled up past the top, it stretches like a sheet on a phone. Lifting it never opens a gap at the bottom.
 
-## 0.32.1 · 5 Nov 2026
+## 0.32.1 · November 2026
+
+### Highlights
+
+- **CLI** adds `scroll-frame`, the frame loop every scroll part uses.
 
 ### Added
 
 - `npx hlmnhkl-ui add scroll-frame`: the frame loop that every scroll part uses, to build your own scroll effect. `list` shows it under Helpers.
 
-## 0.32.0 · 5 Nov 2026
+## 0.32.0 · November 2026
 
 Fluid: things follow the hand. Let go of a sheet, row, toast or photo and it carries on at your speed, then settles.
+
+### Highlights
+
+- **Sheet, Drawer, Toast and Lightbox** carry on at your speed when you let go.
+- **Drawer** closes with a swipe toward its edge on touch.
+- **Toast** flies off the way it was thrown.
 
 ### Added
 
@@ -546,9 +746,15 @@ Fluid: things follow the hand. Let go of a sheet, row, toast or photo and it car
 - Lightbox: a quick flick changes the photo or closes it, however short.
 - Reduced motion keeps every gesture and its result, and drops the glide.
 
-## 0.31.0 · 5 Nov 2026
+## 0.31.0 · November 2026
 
 Magnetic: the right place pulls. Slider marks, list gaps and panel snap places draw what you drag onto them.
+
+### Highlights
+
+- **Slider and RangeSlider** `marks` draw a dragged thumb onto a value.
+- **ResizablePanels** `snap` gives places where a dragged handle lands.
+- **SortableList and KanbanBoard** draw the dragged item into its gap.
 
 ### Added
 
@@ -563,9 +769,15 @@ Magnetic: the right place pulls. Slider marks, list gaps and panel snap places d
 - ResizablePanels: a plain click on a handle no longer moves it, and a folded panel stays folded when you let go.
 - Reduced motion keeps the pull and the landing, and drops the glide.
 
-## 0.30.0 · 5 Nov 2026
+## 0.30.0 · November 2026
 
 Liquid: menus grow out of what opened them, and highlights stretch toward the new choice.
+
+### Highlights
+
+- **DropdownMenu, Popover and Select** grow out of their trigger and fold back.
+- **ContextMenu** grows out of the spot you pressed.
+- **SegmentedControl, ToggleGroup and Tabs** stretch toward the new choice.
 
 ### Added
 
@@ -578,9 +790,14 @@ Liquid: menus grow out of what opened them, and highlights stretch toward the ne
 - SegmentedControl, ToggleGroup (single) and Tabs: the pill or underline stretches toward the new choice.
 - With reduced motion, or in browsers without clip-path or `linear()` easing, each part keeps its old fade or slide.
 
-## 0.29.0 · 2 Nov 2026
+## 0.29.0 · November 2026
 
 Glass: a second Pro theme that turns floating parts into frosted glass, and a lens for the Navbar pill.
+
+### Highlights
+
+- **Glass theme** (Pro) turns floating parts into frosted glass.
+- **GlassLens** (Pro) bends the page under the Navbar pill in Chromium.
 
 ### Added
 
@@ -592,9 +809,15 @@ Glass: a second Pro theme that turns floating parts into frosted glass, and a le
 
 - Navbar, Dialog, Sheet, Popover, DropdownMenu, ContextMenu, Toast and Fab read `--hl-glass-bg`, `--hl-glass-filter` and `--hl-glass-edge`. Without the theme nothing changes.
 
-## 0.28.0 · 2 Nov 2026
+## 0.28.0 · November 2026
 
 Colour comes to hlmnhkl/ui: one blue accent, new chart colours, and four new chart types.
+
+### Highlights
+
+- **The accent** is now blue instead of black.
+- **Four new charts**: ScatterChart, FunnelChart, BulletChart and HeatmapChart.
+- **BarChart** can stack series and run horizontally.
 
 ### Added
 
@@ -612,7 +835,12 @@ Colour comes to hlmnhkl/ui: one blue accent, new chart colours, and four new cha
 - Chart series use a new set of colours in a fixed order, with a lighter step of each in dark mode.
 - Brand themes (Slate, Forest, Clay, Plum) set `--hl-color-accent-hover`. They no longer take over the first chart colour.
 
-## 0.27.1 · 2 Nov 2026
+## 0.27.1 · November 2026
+
+### Highlights
+
+- **ScrollStory** on a narrow screen no longer hides a title under the picture.
+- **Navbar** `dockAfter` no longer hangs low after a fast scroll to the top.
 
 ### Fixed
 
@@ -620,9 +848,15 @@ Colour comes to hlmnhkl/ui: one blue accent, new chart colours, and four new cha
 - ScrollStory `snap` on a narrow screen: steps now scroll freely, so a flick no longer skips steps.
 - Navbar `dockAfter`: after a fast scroll to the top, the bar no longer hangs low on the screen.
 
-## 0.27.0 · 2 Nov 2026
+## 0.27.0 · November 2026
 
 Four new free components: a floating action button, a theme toggle, styles for long text, and a table of contents.
+
+### Highlights
+
+- **Fab** floats one main action at the bottom, in reach of the thumb.
+- **ThemeToggle** switches between light and dark and remembers the choice.
+- **Prose and TableOfContents** style long text and link to its headings.
 
 ### Added
 
@@ -631,9 +865,15 @@ Four new free components: a floating action button, a theme toggle, styles for l
 - Prose: styles plain HTML from Markdown or a CMS for reading. Token `--hl-prose-w`.
 - TableOfContents: the sections of a page as links to their headings. `backToTop` adds a way up.
 
-## 0.26.0 · 1 Nov 2026
+## 0.26.0 · November 2026
 
 Navbar float becomes a liquid pill. On a phone it can move down to the bottom of the screen.
+
+### Highlights
+
+- **Navbar** `float` is now a pill in the middle of the screen.
+- **Navbar** `dockAfter` moves the pill to the bottom on a phone.
+- **Navbar** `centerBrand` puts the brand in the middle on narrow screens.
 
 ### Added
 
@@ -650,16 +890,27 @@ Navbar float becomes a liquid pill. On a phone it can move down to the bottom of
 
 - Navbar `float` never lifted inside a wrapper with no box of its own, such as an Astro island.
 
-## 0.25.1 · 1 Nov 2026
+## 0.25.1 · November 2026
+
+### Highlights
+
+- **Avatar** picture no longer stays hidden behind the initials on server pages.
+- **PinInput** no longer shows the browser's blue selection.
 
 ### Fixed
 
 - Avatar: a picture that loaded before the page became interactive no longer stays hidden behind the initials. This happened with server-rendered pages.
 - PinInput: a focused box that holds a character no longer shows the browser's blue selection.
 
-## 0.25.0 · 1 Nov 2026
+## 0.25.0 · November 2026
 
 Nine new free components, six new scroll parts in Pro, and charts that show their table in place.
+
+### Highlights
+
+- **Six scroll parts** (Pro) include ScrollStory, StackScroll and Parallax.
+- **Nine new free parts** include Toggle, AlertDialog, Meter and CodeBlock.
+- **Chart** has a Chart and Table switch that shows the data in place.
 
 ### Added
 
@@ -701,33 +952,55 @@ Nine new free components, six new scroll parts in Pro, and charts that show thei
 
 - SmoothScroll and ScrollRuler, and the tokens `--hl-ruler-w` and `--hl-ruler-step`. Every scroll part now eases on its own. Copies you made earlier keep working.
 
-## 0.24.0 · 30 Oct 2026
+## 0.24.0 · October 2026
+
+### Highlights
+
+- **hlmnhkl-ui-mcp** is a read-only MCP server for AI tools.
 
 ### Added
 
 - `hlmnhkl-ui-mcp`: a read-only MCP server, so AI tools can look up components, props and install steps. Run `npx -y hlmnhkl-ui-mcp@latest`. It needs Node 20 or later. Setup: https://ui.hlmnhkl.my/mcp
 
-## 0.23.1 · 30 Oct 2026
+## 0.23.1 · October 2026
+
+### Highlights
+
+- **PinInput** is now one Tab stop, so Tab can leave the group.
 
 ### Fixed
 
 - PinInput: Tab could not leave the group when an earlier box was empty. The group is now one Tab stop.
 
-## 0.23.0 · 30 Oct 2026
+## 0.23.0 · October 2026
+
+### Highlights
+
+- **Dark theme** is near-black, with each raised layer a step lighter.
 
 ### Changed
 
 - Dark theme: a near-black page, with each raised layer a step lighter. To get it, copy the new values into the two dark blocks of your `tokens.css`. Changed tokens: `--hl-color-bg`, `--hl-color-surface`, `--hl-color-surface-raised`, `--hl-color-surface-sunken`, `--hl-color-surface-hover`, `--hl-color-surface-active`, `--hl-color-border` and `--hl-color-inverse-fg`.
 
-## 0.22.1 · 30 Oct 2026
+## 0.22.1 · October 2026
+
+### Highlights
+
+- **Dialog, Sheet and Drawer** keep Tab inside the layer in Safari.
 
 ### Fixed
 
 - Dialog, Sheet, Drawer and other layers that hold focus: in Safari, Tab could jump out of the layer. Focus now wraps back.
 
-## 0.22.0 · 30 Oct 2026
+## 0.22.0 · October 2026
 
 Five new Pro components, and many fixes.
+
+### Highlights
+
+- **DataGrid** (Pro) handles thousands of rows, with sort, resize, pin and filter.
+- **SmoothScroll, ScrollDraft, TextRise and ScrollRuler** are new Pro parts.
+- **Touch targets** in Combobox, Breadcrumb and NotificationInbox are at least 44px.
 
 ### Added
 
@@ -749,11 +1022,16 @@ Five new Pro components, and many fixes.
 - ColorPicker: focus on the picked swatch is visible.
 - Blocks and templates: the NotificationsCenter bar no longer covers a focused row. Its phone layout, the Checkout "Place order" button and the SaaS starter's "Sign in" link keep their full size.
 
-## 0.21.2 · 30 Oct 2026
+## 0.21.2 · October 2026
 
 Docs site only. No changes to the library.
 
-## 0.21.1 · 30 Oct 2026
+## 0.21.1 · October 2026
+
+### Highlights
+
+- **VideoPlayer** captions no longer sit under the controls.
+- **VideoPlayer and AudioPlayer** hover fills are a small circle.
 
 ### Changed
 
@@ -764,9 +1042,15 @@ Docs site only. No changes to the library.
 - VideoPlayer: captions no longer sit under the controls.
 - VideoPlayer and AudioPlayer: hover and on fills are a small circle with a gap between buttons.
 
-## 0.21.0 · 29 Oct 2026
+## 0.21.0 · October 2026
 
 Twelve new components, all in Pro.
+
+### Highlights
+
+- **Twelve new Pro parts** arrive, from SwipeActions to VirtualList.
+- **ImageCropper** crops and zooms a photo, round for avatars.
+- **WeekSchedule** shows a week of events by the hour.
 
 ### Added
 
@@ -784,25 +1068,39 @@ Twelve new components, all in Pro.
 - VirtualList: draws only the rows on screen. `scrollToIndex` jumps to one.
 - Tokens `--hl-swipe-action-w`, `--hl-pull-distance`, `--hl-picker-area-h`, `--hl-picker-hue-h`, `--hl-swatch`, `--hl-picker-white`, `--hl-picker-black`, `--hl-signature-h`, `--hl-ink-w`, `--hl-heatmap-cell`, `--hl-heatmap-gap`, `--hl-heatmap-label`, `--hl-heatmap-1` to `--hl-heatmap-4`, `--hl-schedule-hour`, `--hl-schedule-gutter`, `--hl-schedule-min-w` and `--hl-schedule-indent`. `add`, `diff` and `update` list any your `tokens.css` is missing.
 
-## 0.20.3 · 29 Oct 2026
+## 0.20.3 · October 2026
 
 Docs site only. No changes to the library.
 
-## 0.20.2 · 29 Oct 2026
+## 0.20.2 · October 2026
+
+### Highlights
+
+- **Blocks and templates** name people by role, not by made-up names.
 
 ### Changed
 
 - Blocks and templates name people by role ("Design lead", "You") and businesses by what they are, instead of made-up names. Emails are role addresses at example.com.
 
-## 0.20.1 · 28 Oct 2026
+## 0.20.1 · October 2026
+
+### Highlights
+
+- **`add`, `diff` and `update`** check `tokens.css` and list missing tokens.
 
 ### Changed
 
 - `add`, `diff` and `update` check your `tokens.css` against the latest one. If tokens are missing, they list the names and lines to copy. Your file is never changed.
 
-## 0.20.0 · 28 Oct 2026
+## 0.20.0 · October 2026
 
 A full bug audit of every component, block and template.
+
+### Highlights
+
+- **Disabled controls** use one opacity, `--hl-disabled-opacity`.
+- **Touch screens** get at least a 44px target on small controls.
+- **Bug fixes** cover components, blocks and templates, from TimePicker to Checkout.
 
 ### Added
 
@@ -855,7 +1153,13 @@ A full bug audit of every component, block and template.
 - Tag, Navbar, Breadcrumb, Sidebar, Stat, Link, ProgressBar, Collapsible and Pagination: fixes for focus, wrapping, ARIA values and overflow.
 - Blocks: Checkout locks the cart while placing the order. Inbox and Schedule use one date for today. AppShell's Profile item opens a page. EventPage's calendar file downloads in Safari. Booking, TwoStepVerification, Onboarding, ProjectBoard and Schedule fit at 320px.
 
-## 0.19.0 · 19 Oct 2026
+## 0.19.0 · October 2026
+
+### Highlights
+
+- **`npx hlmnhkl-ui init`** sets a project up in one step.
+- **`list`, `diff` and `update`** are new CLI commands.
+- **`llms.txt`** and `registry.json` help AI assistants find components.
 
 ### Added
 
@@ -874,7 +1178,13 @@ A full bug audit of every component, block and template.
 
 - Toast: its hidden announcers no longer add 1px of scroll under the page.
 
-## 0.18.0 · 18 Oct 2026
+## 0.18.0 · October 2026
+
+### Highlights
+
+- **TreeView** `onMove` drags items into folders, by pointer, touch or keyboard.
+- **`moveNode`** applies a move to your tree data in one line.
+- **The page** scrolls with the mouse wheel over a Table or ScrollArea again.
 
 ### Added
 
@@ -890,7 +1200,12 @@ A full bug audit of every component, block and template.
 
 - The page did not scroll with the mouse wheel while the pointer was over a Table or a ScrollArea.
 
-## 0.17.0 · 18 Oct 2026
+## 0.17.0 · October 2026
+
+### Highlights
+
+- **Skeleton** has `variant="sketch"`, dashed outlines for a quieter wait.
+- **`--hl-color-surface-raised`** is a new surface for pills and thumbs on a track.
 
 ### Added
 
@@ -901,7 +1216,13 @@ A full bug audit of every component, block and template.
 
 - Dark mode: SegmentedControl and ToggleGroup pills and Slider and RangeSlider thumbs use the raised surface. `--hl-shadow-1` and `--hl-shadow-2` are fainter.
 
-## 0.16.0 · 18 Oct 2026
+## 0.16.0 · October 2026
+
+### Highlights
+
+- **Table** `groupBy` gathers rows under a header per group.
+- **Route** (Pro) shows progress as a journey with stops on a road.
+- **TimePicker** wheels turn like a drum, and 59 rolls on to 00.
 
 ### Added
 
@@ -913,21 +1234,37 @@ A full bug audit of every component, block and template.
 
 - TimePicker: wheels turn like a drum. Hours and minutes go round, so 59 rolls on to 00.
 
-## 0.15.2 · 18 Oct 2026
+## 0.15.2 · October 2026
+
+### Highlights
+
+- **List and detail** (Pro block) is removed. Other blocks cover it.
+- **Ink** (Pro theme) is removed. Slate covers it.
 
 ### Removed
 
 - Pro block List and detail. Team members, Inbox and Orders cover it.
 - Pro theme Ink. Slate covers a cool blue-grey.
 
-## 0.15.1 · 18 Oct 2026
+## 0.15.1 · October 2026
+
+### Highlights
+
+- **Safari** no longer shows a small dot where a hidden line starts.
+- **Tabs** fit a narrow phone more often.
 
 ### Fixed
 
 - Safari no longer shows a small dot where a hidden line starts in Stepper, Checkbox, CopyButton, ProgressRing, PasswordInput and Table row checkboxes.
 - Tabs fit a narrow phone more often. Every tab is at least 44px wide.
 
-## 0.15.0 · 17 Oct 2026
+## 0.15.0 · October 2026
+
+### Highlights
+
+- **Retime** (Motion) sets the speed of every animation.
+- **`morph()`** (Motion) glides an element to its new place after a change.
+- **The npm package** holds only the 50 free components. The other 53 are Pro.
 
 ### Added
 
@@ -987,13 +1324,22 @@ A full bug audit of every component, block and template.
 - Buttons inside Calendar, Collapsible, Navbar, Menubar, Sidebar, Stepper, Tabs, TimePicker, Toolbar and BottomTabBar use the page font and colour.
 - Carousel dots are at least 44px to tap.
 
-## 0.14.7 · 16 Oct 2026
+## 0.14.7 · October 2026
+
+### Highlights
+
+- **Table** column headers show again under 560px.
 
 ### Fixed
 
 - Table lost its column headers under 560px, even in the default `layout="scroll"`. Headers show again.
 
-## 0.14.6 · 16 Oct 2026
+## 0.14.6 · October 2026
+
+### Highlights
+
+- **Table** `layout` is `'scroll'` (default) or `'stack'`.
+- **Table** on a narrow screen scrolls sideways instead of turning into cards.
 
 ### Added
 
@@ -1008,7 +1354,12 @@ A full bug audit of every component, block and template.
 
 - Table cards (`layout="stack"`) no longer show an empty band when there are no sort buttons or select-all box.
 
-## 0.14.5 · 16 Oct 2026
+## 0.14.5 · October 2026
+
+### Highlights
+
+- **iPhone Safari** no longer zooms in when a field is tapped.
+- **Tooltip and HoverCard** work on touch screens.
 
 ### Added
 
@@ -1022,25 +1373,30 @@ A full bug audit of every component, block and template.
 - Tooltip works on touch screens: a tap shows the tip.
 - HoverCard works on touch screens: the first tap opens the card, a second follows the link, and a tap elsewhere closes it.
 
-## 0.14.4 · 14 Oct 2026
+## 0.14.4 · October 2026
 
 Docs site only. No changes to the library.
 
-## 0.14.3 · 14 Oct 2026
+## 0.14.3 · October 2026
 
 Docs site only. No changes to the library.
 
-## 0.14.2 · 14 Oct 2026
+## 0.14.2 · October 2026
 
 Docs site only. No changes to the library.
 
-## 0.14.1 · 14 Oct 2026
+## 0.14.1 · October 2026
 
 Docs site only. No changes to the library.
 
-## 0.14.0 · 14 Oct 2026
+## 0.14.0 · October 2026
 
 Works in Next.js, and no uppercase labels.
+
+### Highlights
+
+- **Next.js** App Router works: parts with state start with `'use client'`.
+- **Labels** use sentence case, not capitals, in menus, tables and dividers.
 
 ### Changed
 
@@ -1052,9 +1408,14 @@ Works in Next.js, and no uppercase labels.
 
 - Components work in the Next.js App Router. Components with state or click handling start with `'use client'`.
 
-## 0.13.0 · 14 Oct 2026
+## 0.13.0 · October 2026
 
 One command to install, and no sticky hover on phones.
+
+### Highlights
+
+- **One command** installs a part: `npx hlmnhkl-ui@latest add button`.
+- **Hover styles** no longer stay on after a tap on touch screens.
 
 ### Added
 
@@ -1066,46 +1427,57 @@ One command to install, and no sticky hover on phones.
 - Hover styles no longer stay on after a tap on touch screens.
 - The VideoPlayer seek thumb shows on touch screens.
 
-## 0.12.0 · 14 Oct 2026
+## 0.12.0 · October 2026
 
 A licence.
+
+### Highlights
+
+- **MIT licence** covers the components, tokens and the add command.
+- **Blocks, templates and themes** have their own Pro licence.
 
 ### Added
 
 - MIT licence for the components, tokens and the add command.
 - Blocks, templates and themes have their own Pro licence (LICENSE-PRO.md). Until Pro is on sale, they may not be copied or used.
 
-## 0.11.7 · 14 Oct 2026
+## 0.11.7 · October 2026
 
 Docs site only. No changes to the library.
 
-## 0.11.6 · 14 Oct 2026
+## 0.11.6 · October 2026
 
 Docs site only. No changes to the library.
 
-## 0.11.5 · 14 Oct 2026
+## 0.11.5 · October 2026
 
 Docs site only. No changes to the library.
 
-## 0.11.4 · 14 Oct 2026
+## 0.11.4 · October 2026
 
 Docs site only. No changes to the library.
 
-## 0.11.3 · 14 Oct 2026
+## 0.11.3 · October 2026
 
 Docs site only. No changes to the library.
 
-## 0.11.2 · 14 Oct 2026
+## 0.11.2 · October 2026
 
 Docs site only. No changes to the library.
 
-## 0.11.1 · 14 Oct 2026
+## 0.11.1 · October 2026
 
 Docs site only. No changes to the library.
 
-## 0.11.0 · 14 Oct 2026
+## 0.11.0 · October 2026
 
 Templates and themes.
+
+### Highlights
+
+- **Four templates** are full apps: SaaS starter, Workspace, Admin console and Marketing site.
+- **Five brand themes** come with Compact and Comfortable density.
+- **`npm run add`** copies blocks, templates and themes too.
 
 ### Added
 
@@ -1120,9 +1492,15 @@ Templates and themes.
 - A collapsed Sidebar no longer clips the header text.
 - Team members shows one "Role" heading instead of a label on every row.
 
-## 0.10.0 · 14 Oct 2026
+## 0.10.0 · October 2026
 
 22 more blocks.
+
+### Highlights
+
+- **22 new blocks**, 30 in total, from Checkout to Event page.
+- **KanbanBoard** `onCardOpen` opens a card on click or Enter.
+- **RadioGroup** `error` shows like field errors.
 
 ### Added
 
@@ -1143,13 +1521,18 @@ Templates and themes.
 - InlineEdit no longer wraps early in narrow spaces.
 - The unread dot in NotificationInbox lines up with the avatar.
 
-## 0.9.1 · 14 Oct 2026
+## 0.9.1 · October 2026
 
 Docs site only. No changes to the library.
 
-## 0.9.0 · 14 Oct 2026
+## 0.9.0 · October 2026
 
 English only.
+
+### Highlights
+
+- **All built-in text** is in English. Malaysian formats stay.
+- **CurrencyInput** default `locale` is now `en-MY`.
 
 ### Changed
 
@@ -1161,9 +1544,15 @@ English only.
 - `malaysianStateNamesMs` from AddressFields.
 - The Language field from the Settings block.
 
-## 0.8.0 · 14 Oct 2026
+## 0.8.0 · October 2026
 
 100 components and a copy command.
+
+### Highlights
+
+- **Menubar, Toolbar and ResizablePanels** are new.
+- **VideoPlayer, AudioPlayer and QrCode** are new.
+- **`npm run add`** copies components and what they need into your project.
 
 ### Added
 
@@ -1180,13 +1569,19 @@ English only.
 
 - Destructive items in DropdownMenu and ContextMenu are red and bold.
 
-## 0.7.1 · 14 Oct 2026
+## 0.7.1 · October 2026
 
 Docs site only. No changes to the library.
 
-## 0.7.0 · 14 Oct 2026
+## 0.7.0 · October 2026
 
 Malaysian inputs and nine component gaps closed.
+
+### Highlights
+
+- **IcInput, PhoneInput, CurrencyInput and AddressFields** are new Malaysian inputs.
+- **Button** `href` renders a link with the same look.
+- **Button** with `aria-disabled` looks disabled but keeps focus.
 
 ### Added
 
@@ -1205,9 +1600,15 @@ Malaysian inputs and nine component gaps closed.
 - Split leaves no gap when there is no sidebar.
 - SearchInput hides its "/" hint on touch screens.
 
-## 0.6.0 · 14 Oct 2026
+## 0.6.0 · October 2026
 
 Colour where it means something.
+
+### Highlights
+
+- **Status colour tokens** cover success, warning and danger.
+- **Badge** `tone` is `neutral`, `success`, `warning` or `danger`.
+- **Button** `danger` is now solid red.
 
 ### Added
 
@@ -1222,9 +1623,14 @@ Colour where it means something.
 - Field errors show a red border and red message in every form field.
 - Button `danger` is now solid red.
 
-## 0.5.0 · 14 Oct 2026
+## 0.5.0 · October 2026
 
 Layout primitives and the first eight blocks.
+
+### Highlights
+
+- **Layout primitives** include Stack, Cluster, Grid, Container and Split.
+- **Eight blocks** include app shell, sign in, dashboard and settings.
 
 ### Added
 
@@ -1235,9 +1641,15 @@ Layout primitives and the first eight blocks.
 
 - Container no longer makes the page scroll sideways when stretched.
 
-## 0.4.0 · 14 Oct 2026
+## 0.4.0 · October 2026
 
 18 bug fixes, and every built-in word can be changed.
+
+### Highlights
+
+- **`labels`** prop on 16 components sets all visible and spoken text.
+- **Table** turns sorting off on the third click of a column.
+- **18 bug fixes** include FileUpload, Select and RangeSlider.
 
 ### Added
 
@@ -1256,26 +1668,40 @@ Layout primitives and the first eight blocks.
 - RangeSlider no longer shows values like 0.30000000000000004.
 - Fixes in Checkbox, Chart, DropdownMenu, KanbanBoard, field error messages, SegmentedControl, TagInput, Marquee, Pagination, Tabs and TreeView.
 
-## 0.3.0 · 14 Oct 2026
+## 0.3.0 · October 2026
 
 Documented props.
+
+### Highlights
+
+- **Every prop** has a one-line description, shown when you hover it in your editor.
 
 ### Added
 
 - Every prop has a one-line description, shown when you hover it in your editor.
 
-## 0.2.0 · 13 Oct 2026
+## 0.2.0 · October 2026
 
 The library gets its name.
+
+### Highlights
+
+- **hlmnhkl/ui** is the new name, and tokens now start with `--hl-`.
+- **CommandPalette, Sidebar, Navbar and TreeView** mark the active item with a filled background.
 
 ### Changed
 
 - Renamed from Monochrome UI to hlmnhkl/ui. The package is `@hlmnhkl/ui`, and tokens now start with `--hl-`.
 - CommandPalette, Sidebar, Navbar and TreeView: the active item uses a filled background instead of a line on the left edge.
 
-## 0.1.0 · 13 Oct 2026
+## 0.1.0 · October 2026
 
 First release.
+
+### Highlights
+
+- **73 animated components** ship in the first release.
+- **Light and dark** themes, reduced motion, keyboard and screen reader support.
 
 ### Added
 

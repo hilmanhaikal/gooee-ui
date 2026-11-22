@@ -50,7 +50,7 @@ const morph = createDialogMorph(() => panel.value)
 const drag = createDragClose(() => panel.value, {
   onClose: close,
   isOpen: () => open.value,
-  can: (e) => window.matchMedia('(max-width: 520px)').matches && !!(e.target as HTMLElement).closest(`.${styles.handle}, .${styles.header}`),
+  can: (e) => window.matchMedia('(max-width: 599px)').matches && !!(e.target as HTMLElement).closest(`.${styles.handle}, .${styles.header}`),
 })
 
 let release: Array<() => void> = []

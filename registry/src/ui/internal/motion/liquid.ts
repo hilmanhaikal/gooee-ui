@@ -65,7 +65,7 @@ export function startShape(panel: DOMRect, from: DOMRect, radius: string) {
 }
 
 // The phone layout of Dialog and AlertDialog, as their CSS sets it.
-const SHEET = '(max-width: 520px)'
+const SHEET = '(max-width: 599px)'
 
 const live = (run: Animation | null) => run?.playState === 'running' || run?.playState === 'paused'
 

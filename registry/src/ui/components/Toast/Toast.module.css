@@ -21,7 +21,7 @@
   transition: height var(--gooee-motion-slow) var(--gooee-ease-morph);
 }
 
-@media (min-width: 640px) {
+@media (min-width: 600px) {
   .viewport {
     left: auto;
     right: var(--gooee-space-7);

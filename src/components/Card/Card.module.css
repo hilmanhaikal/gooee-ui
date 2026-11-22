@@ -55,7 +55,7 @@
 
 .lg .body { padding: var(--gooee-space-8); }
 
-@media (max-width: 520px) {
+@media (max-width: 599px) {
   .lg .body { padding: var(--gooee-space-6); }
 }
 
