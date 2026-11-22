@@ -1,0 +1,252 @@
+/* Gooee UI, MIT licence. https://gooee.dev */
+@layer gooee.components {
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gooee-space-3);
+  width: 100%;
+  min-width: 0;
+  color: var(--gooee-color-fg);
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gooee-space-3);
+}
+
+.tabs {
+  display: inline-flex;
+  gap: var(--gooee-space-1);
+  padding: var(--gooee-space-1);
+  border-radius: var(--gooee-radius-full);
+  background: var(--gooee-color-surface-sunken);
+}
+
+.tab {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gooee-space-2);
+  height: var(--gooee-control-h-sm);
+  padding: 0 var(--gooee-space-4);
+  border: 0;
+  border-radius: var(--gooee-radius-full);
+  background: transparent;
+  color: var(--gooee-color-fg-muted);
+  font-size: var(--gooee-text-sm);
+  font-weight: var(--gooee-weight-medium);
+  cursor: pointer;
+  transition:
+    background-color var(--gooee-motion-base) var(--gooee-ease-morph),
+    color var(--gooee-motion-fast) var(--gooee-ease-morph),
+    box-shadow var(--gooee-motion-base) var(--gooee-ease-morph);
+}
+
+.tab::after {
+  content: "";
+  position: absolute;
+  inset: calc((100% - var(--gooee-hit-min)) / 2) 0;
+}
+
+/* A short label such as "All" is narrower than a finger. */
+@media (pointer: coarse) {
+  .tab::after { inset-inline: min(0px, calc((100% - var(--gooee-hit-min)) / 2)); }
+}
+
+@media (hover: hover) {
+  .tab:hover { color: var(--gooee-color-fg); }
+}
+
+.tab[aria-selected="true"] {
+  background: var(--gooee-color-surface);
+  box-shadow: var(--gooee-shadow-1);
+  color: var(--gooee-color-fg);
+}
+
+.tab:focus-visible { outline: none; box-shadow: var(--gooee-focus-ring); }
+
+.tabCount {
+  min-width: var(--gooee-icon-lg);
+  padding: 0 var(--gooee-space-2);
+  border-radius: var(--gooee-radius-full);
+  background: var(--gooee-color-inverse);
+  color: var(--gooee-color-inverse-fg);
+  font-size: var(--gooee-text-xs);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--gooee-icon-lg);
+  text-align: center;
+}
+
+.panel {
+  max-height: var(--gooee-notification-inbox-max-h, 420px);
+  margin: 0 calc(var(--gooee-space-3) * -1);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gooee-space-1);
+  margin: 0;
+  padding: var(--gooee-space-1);
+  list-style: none;
+}
+
+.row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border-radius: var(--gooee-radius-md);
+  transition: background-color var(--gooee-motion-base) var(--gooee-ease-morph);
+}
+
+/* Unread: filled background, a dot and spoken text, never colour alone */
+.row[data-status="unread"] { background: var(--gooee-color-surface-sunken); }
+
+.main {
+  display: flex;
+  flex: 1;
+  align-items: flex-start;
+  gap: var(--gooee-space-4);
+  min-width: 0;
+  min-height: var(--gooee-hit-min);
+  padding: var(--gooee-space-4);
+  border: 0;
+  border-radius: inherit;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  text-decoration: none;
+}
+
+a.main,
+button.main { cursor: pointer; }
+
+@media (hover: hover) {
+  a.main:hover,
+  button.main:hover { background: var(--gooee-color-surface-hover); }
+}
+
+.main:focus-visible { outline: none; box-shadow: var(--gooee-focus-ring); }
+
+.text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--gooee-space-1);
+  min-width: 0;
+}
+
+.title {
+  font-size: var(--gooee-text-sm);
+  line-height: var(--gooee-leading-snug);
+}
+
+.row[data-status="unread"] .title { font-weight: var(--gooee-weight-semibold); }
+
+.body {
+  color: var(--gooee-color-fg-muted);
+  font-size: var(--gooee-text-sm);
+  line-height: var(--gooee-leading-snug);
+}
+
+.time {
+  color: var(--gooee-color-fg-muted);
+  font-size: var(--gooee-text-xs);
+}
+
+/* Every row keeps the slot, so read and unread rows line up; the dot sits level with the avatar's middle, or the title's first line. */
+.dotSlot {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: var(--gooee-unread-dot);
+  height: calc(round(nearest, var(--gooee-text-sm) * var(--gooee-leading-snug-ratio), 4px));
+  margin-inline-end: calc(var(--gooee-space-2) - var(--gooee-space-4));
+}
+
+.dotSlot[data-avatar] { height: var(--gooee-avatar-sm, 28px); }
+
+.dot {
+  width: var(--gooee-unread-dot);
+  height: var(--gooee-unread-dot);
+  border-radius: var(--gooee-radius-full);
+  background: var(--gooee-color-fg);
+}
+
+.mark {
+  margin-inline-end: var(--gooee-space-2);
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gooee-space-2);
+  padding: var(--gooee-space-8) var(--gooee-space-5);
+  text-align: center;
+  animation: emptyIn var(--gooee-motion-slow) var(--gooee-ease-morph);
+}
+
+.emptyIcon {
+  display: grid;
+  place-items: center;
+  width: var(--gooee-control-h-lg);
+  height: var(--gooee-control-h-lg);
+  margin-bottom: var(--gooee-space-2);
+  border-radius: var(--gooee-radius-full);
+  background: var(--gooee-color-surface-sunken);
+  color: var(--gooee-color-fg-muted);
+  font-size: var(--gooee-icon-lg);
+}
+
+.emptyTitle {
+  margin: 0;
+  font-size: var(--gooee-text-md);
+  font-weight: var(--gooee-weight-semibold);
+}
+
+.emptyBody {
+  margin: 0;
+  color: var(--gooee-color-fg-muted);
+  font-size: var(--gooee-text-sm);
+}
+
+.bellIcon {
+  position: relative;
+  display: inline-flex;
+}
+
+/* The Badge caps its width at 100%, which here is the 20px icon, so the cap is lifted. Two classes, so this
+   wins over the Badge's own rules whichever file loads last. */
+.bellIcon .count {
+  --gooee-badge-h: var(--gooee-space-6);
+  position: absolute;
+  top: calc(var(--gooee-space-3) * -1);
+  left: calc(100% - var(--gooee-space-3));
+  justify-content: center;
+  min-width: var(--gooee-badge-h);
+  max-width: none;
+  padding-inline: var(--gooee-space-2);
+  box-shadow: 0 0 0 var(--gooee-focus-width) var(--gooee-color-bg);
+}
+
+.sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@keyframes emptyIn {
+  from { opacity: 0; transform: translateY(var(--gooee-shift-sm)); }
+}
+}

@@ -2064,6 +2064,238 @@
       ]
     },
     {
+      "name": "image",
+      "type": "registry:item",
+      "title": "Image",
+      "description": "An image that keeps its space, loads from a blurred placeholder into focus, and shows a calm fallback when it fails.",
+      "registryDependencies": [
+        "hilmanhaikal/gooee-ui/core"
+      ],
+      "files": [
+        {
+          "path": "registry/src/ui/components/Button/Button.module.css",
+          "type": "registry:file",
+          "target": "~/src/ui/components/Button/Button.module.css"
+        },
+        {
+          "path": "registry/src/ui/components/Button/Button.tsx",
+          "type": "registry:file",
+          "target": "~/src/ui/components/Button/Button.tsx"
+        },
+        {
+          "path": "registry/src/ui/components/Button/index.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/components/Button/index.ts"
+        },
+        {
+          "path": "registry/src/ui/components/Image/Image.module.css",
+          "type": "registry:file",
+          "target": "~/src/ui/components/Image/Image.module.css"
+        },
+        {
+          "path": "registry/src/ui/components/Image/Image.tsx",
+          "type": "registry:file",
+          "target": "~/src/ui/components/Image/Image.tsx"
+        },
+        {
+          "path": "registry/src/ui/components/Image/index.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/components/Image/index.ts"
+        },
+        {
+          "path": "registry/src/ui/components/Spinner/Spinner.module.css",
+          "type": "registry:file",
+          "target": "~/src/ui/components/Spinner/Spinner.module.css"
+        },
+        {
+          "path": "registry/src/ui/components/Spinner/Spinner.tsx",
+          "type": "registry:file",
+          "target": "~/src/ui/components/Spinner/Spinner.tsx"
+        },
+        {
+          "path": "registry/src/ui/components/Spinner/index.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/components/Spinner/index.ts"
+        },
+        {
+          "path": "registry/src/ui/internal/cx.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/cx.ts"
+        },
+        {
+          "path": "registry/src/ui/internal/feel.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/feel.ts"
+        },
+        {
+          "path": "registry/src/ui/internal/liquidPath.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/liquidPath.ts"
+        },
+        {
+          "path": "registry/src/ui/internal/mergeRefs.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/mergeRefs.ts"
+        },
+        {
+          "path": "registry/src/ui/internal/motion.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/motion.ts"
+        },
+        {
+          "path": "registry/src/ui/internal/motion/liquidMatter.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/motion/liquidMatter.ts"
+        },
+        {
+          "path": "registry/src/ui/internal/motion/softPress.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/motion/softPress.ts"
+        },
+        {
+          "path": "registry/src/ui/internal/softPress.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/softPress.ts"
+        },
+        {
+          "path": "registry/src/ui/tokens.css",
+          "type": "registry:file",
+          "target": "~/src/ui/tokens.css"
+        }
+      ]
+    },
+    {
+      "name": "image-cropper",
+      "type": "registry:item",
+      "title": "ImageCropper",
+      "description": "Crop and zoom one photo inside a fixed frame. Drag to move it, pinch or scroll to zoom. It gives back the crop in pixels of the original photo, ready for a canvas.",
+      "registryDependencies": [
+        "hilmanhaikal/gooee-ui/core"
+      ],
+      "files": [
+        {
+          "path": "registry/src/ui/components/IconButton/IconButton.module.css",
+          "type": "registry:file",
+          "target": "~/src/ui/components/IconButton/IconButton.module.css"
+        },
+        {
+          "path": "registry/src/ui/components/IconButton/IconButton.tsx",
+          "type": "registry:file",
+          "target": "~/src/ui/components/IconButton/IconButton.tsx"
+        },
+        {
+          "path": "registry/src/ui/components/IconButton/index.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/components/IconButton/index.ts"
+        },
+        {
+          "path": "registry/src/ui/components/ImageCropper/ImageCropper.module.css",
+          "type": "registry:file",
+          "target": "~/src/ui/components/ImageCropper/ImageCropper.module.css"
+        },
+        {
+          "path": "registry/src/ui/components/ImageCropper/ImageCropper.tsx",
+          "type": "registry:file",
+          "target": "~/src/ui/components/ImageCropper/ImageCropper.tsx"
+        },
+        {
+          "path": "registry/src/ui/components/ImageCropper/index.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/components/ImageCropper/index.ts"
+        },
+        {
+          "path": "registry/src/ui/components/Slider/Slider.module.css",
+          "type": "registry:file",
+          "target": "~/src/ui/components/Slider/Slider.module.css"
+        },
+        {
+          "path": "registry/src/ui/components/Slider/Slider.tsx",
+          "type": "registry:file",
+          "target": "~/src/ui/components/Slider/Slider.tsx"
+        },
+        {
+          "path": "registry/src/ui/components/Slider/index.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/components/Slider/index.ts"
+        },
+        {
+          "path": "registry/src/ui/icons/icons.module.css",
+          "type": "registry:file",
+          "target": "~/src/ui/icons/icons.module.css"
+        },
+        {
+          "path": "registry/src/ui/icons/icons.tsx",
+          "type": "registry:file",
+          "target": "~/src/ui/icons/icons.tsx"
+        },
+        {
+          "path": "registry/src/ui/internal/FieldMessage.module.css",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/FieldMessage.module.css"
+        },
+        {
+          "path": "registry/src/ui/internal/FieldMessage.tsx",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/FieldMessage.tsx"
+        },
+        {
+          "path": "registry/src/ui/internal/cx.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/cx.ts"
+        },
+        {
+          "path": "registry/src/ui/internal/feel.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/feel.ts"
+        },
+        {
+          "path": "registry/src/ui/internal/formCore.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/formCore.ts"
+        },
+        {
+          "path": "registry/src/ui/internal/mergeRefs.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/mergeRefs.ts"
+        },
+        {
+          "path": "registry/src/ui/internal/motion.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/motion.ts"
+        },
+        {
+          "path": "registry/src/ui/internal/motion/imageCropper.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/motion/imageCropper.ts"
+        },
+        {
+          "path": "registry/src/ui/internal/motion/slider.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/motion/slider.ts"
+        },
+        {
+          "path": "registry/src/ui/internal/ratio.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/ratio.ts"
+        },
+        {
+          "path": "registry/src/ui/internal/useControllable.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/useControllable.ts"
+        },
+        {
+          "path": "registry/src/ui/internal/useField.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/useField.ts"
+        },
+        {
+          "path": "registry/src/ui/tokens.css",
+          "type": "registry:file",
+          "target": "~/src/ui/tokens.css"
+        }
+      ]
+    },
+    {
       "name": "input",
       "type": "registry:item",
       "title": "Input",
@@ -2258,6 +2490,172 @@
           "path": "registry/src/ui/internal/motion/keys.ts",
           "type": "registry:file",
           "target": "~/src/ui/internal/motion/keys.ts"
+        },
+        {
+          "path": "registry/src/ui/tokens.css",
+          "type": "registry:file",
+          "target": "~/src/ui/tokens.css"
+        }
+      ]
+    },
+    {
+      "name": "lightbox",
+      "type": "registry:item",
+      "title": "Lightbox",
+      "description": "Open a photo large. It zooms out of its thumbnail, swipes or arrows to the next one, and shrinks back on close. A flick is enough to change photo or close, and a short drag glides back.",
+      "registryDependencies": [
+        "hilmanhaikal/gooee-ui/core"
+      ],
+      "files": [
+        {
+          "path": "registry/src/ui/components/Button/Button.module.css",
+          "type": "registry:file",
+          "target": "~/src/ui/components/Button/Button.module.css"
+        },
+        {
+          "path": "registry/src/ui/components/Button/Button.tsx",
+          "type": "registry:file",
+          "target": "~/src/ui/components/Button/Button.tsx"
+        },
+        {
+          "path": "registry/src/ui/components/Button/index.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/components/Button/index.ts"
+        },
+        {
+          "path": "registry/src/ui/components/Image/Image.module.css",
+          "type": "registry:file",
+          "target": "~/src/ui/components/Image/Image.module.css"
+        },
+        {
+          "path": "registry/src/ui/components/Image/Image.tsx",
+          "type": "registry:file",
+          "target": "~/src/ui/components/Image/Image.tsx"
+        },
+        {
+          "path": "registry/src/ui/components/Image/index.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/components/Image/index.ts"
+        },
+        {
+          "path": "registry/src/ui/components/Lightbox/Lightbox.module.css",
+          "type": "registry:file",
+          "target": "~/src/ui/components/Lightbox/Lightbox.module.css"
+        },
+        {
+          "path": "registry/src/ui/components/Lightbox/Lightbox.tsx",
+          "type": "registry:file",
+          "target": "~/src/ui/components/Lightbox/Lightbox.tsx"
+        },
+        {
+          "path": "registry/src/ui/components/Lightbox/index.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/components/Lightbox/index.ts"
+        },
+        {
+          "path": "registry/src/ui/components/Spinner/Spinner.module.css",
+          "type": "registry:file",
+          "target": "~/src/ui/components/Spinner/Spinner.module.css"
+        },
+        {
+          "path": "registry/src/ui/components/Spinner/Spinner.tsx",
+          "type": "registry:file",
+          "target": "~/src/ui/components/Spinner/Spinner.tsx"
+        },
+        {
+          "path": "registry/src/ui/components/Spinner/index.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/components/Spinner/index.ts"
+        },
+        {
+          "path": "registry/src/ui/icons/icons.module.css",
+          "type": "registry:file",
+          "target": "~/src/ui/icons/icons.module.css"
+        },
+        {
+          "path": "registry/src/ui/icons/icons.tsx",
+          "type": "registry:file",
+          "target": "~/src/ui/icons/icons.tsx"
+        },
+        {
+          "path": "registry/src/ui/internal/Portal.tsx",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/Portal.tsx"
+        },
+        {
+          "path": "registry/src/ui/internal/cx.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/cx.ts"
+        },
+        {
+          "path": "registry/src/ui/internal/feel.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/feel.ts"
+        },
+        {
+          "path": "registry/src/ui/internal/focus.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/focus.ts"
+        },
+        {
+          "path": "registry/src/ui/internal/keyboard.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/keyboard.ts"
+        },
+        {
+          "path": "registry/src/ui/internal/layers.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/layers.ts"
+        },
+        {
+          "path": "registry/src/ui/internal/liquidPath.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/liquidPath.ts"
+        },
+        {
+          "path": "registry/src/ui/internal/mergeRefs.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/mergeRefs.ts"
+        },
+        {
+          "path": "registry/src/ui/internal/motion.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/motion.ts"
+        },
+        {
+          "path": "registry/src/ui/internal/motion/fling.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/motion/fling.ts"
+        },
+        {
+          "path": "registry/src/ui/internal/motion/focus.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/motion/focus.ts"
+        },
+        {
+          "path": "registry/src/ui/internal/motion/layers.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/motion/layers.ts"
+        },
+        {
+          "path": "registry/src/ui/internal/motion/lightbox.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/motion/lightbox.ts"
+        },
+        {
+          "path": "registry/src/ui/internal/motion/liquidMatter.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/motion/liquidMatter.ts"
+        },
+        {
+          "path": "registry/src/ui/internal/motion/softPress.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/motion/softPress.ts"
+        },
+        {
+          "path": "registry/src/ui/internal/softPress.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/softPress.ts"
         },
         {
           "path": "registry/src/ui/tokens.css",
@@ -2492,6 +2890,172 @@
           "path": "registry/src/ui/internal/motion/morphButton.ts",
           "type": "registry:file",
           "target": "~/src/ui/internal/motion/morphButton.ts"
+        },
+        {
+          "path": "registry/src/ui/internal/useControllable.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/useControllable.ts"
+        },
+        {
+          "path": "registry/src/ui/tokens.css",
+          "type": "registry:file",
+          "target": "~/src/ui/tokens.css"
+        }
+      ]
+    },
+    {
+      "name": "notification-inbox",
+      "type": "registry:item",
+      "title": "NotificationInbox",
+      "description": "Notifications with unread state, mark one or all as read, All and Unread tabs and a calm empty state. NotificationBell opens it from a Popover.",
+      "registryDependencies": [
+        "hilmanhaikal/gooee-ui/core"
+      ],
+      "files": [
+        {
+          "path": "registry/src/ui/components/Avatar/Avatar.module.css",
+          "type": "registry:file",
+          "target": "~/src/ui/components/Avatar/Avatar.module.css"
+        },
+        {
+          "path": "registry/src/ui/components/Avatar/Avatar.tsx",
+          "type": "registry:file",
+          "target": "~/src/ui/components/Avatar/Avatar.tsx"
+        },
+        {
+          "path": "registry/src/ui/components/Avatar/index.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/components/Avatar/index.ts"
+        },
+        {
+          "path": "registry/src/ui/components/Badge/Badge.module.css",
+          "type": "registry:file",
+          "target": "~/src/ui/components/Badge/Badge.module.css"
+        },
+        {
+          "path": "registry/src/ui/components/Badge/Badge.tsx",
+          "type": "registry:file",
+          "target": "~/src/ui/components/Badge/Badge.tsx"
+        },
+        {
+          "path": "registry/src/ui/components/Badge/index.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/components/Badge/index.ts"
+        },
+        {
+          "path": "registry/src/ui/components/Button/Button.module.css",
+          "type": "registry:file",
+          "target": "~/src/ui/components/Button/Button.module.css"
+        },
+        {
+          "path": "registry/src/ui/components/Button/Button.tsx",
+          "type": "registry:file",
+          "target": "~/src/ui/components/Button/Button.tsx"
+        },
+        {
+          "path": "registry/src/ui/components/Button/index.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/components/Button/index.ts"
+        },
+        {
+          "path": "registry/src/ui/components/IconButton/IconButton.module.css",
+          "type": "registry:file",
+          "target": "~/src/ui/components/IconButton/IconButton.module.css"
+        },
+        {
+          "path": "registry/src/ui/components/IconButton/IconButton.tsx",
+          "type": "registry:file",
+          "target": "~/src/ui/components/IconButton/IconButton.tsx"
+        },
+        {
+          "path": "registry/src/ui/components/IconButton/index.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/components/IconButton/index.ts"
+        },
+        {
+          "path": "registry/src/ui/components/NotificationInbox/NotificationInbox.module.css",
+          "type": "registry:file",
+          "target": "~/src/ui/components/NotificationInbox/NotificationInbox.module.css"
+        },
+        {
+          "path": "registry/src/ui/components/NotificationInbox/NotificationInbox.tsx",
+          "type": "registry:file",
+          "target": "~/src/ui/components/NotificationInbox/NotificationInbox.tsx"
+        },
+        {
+          "path": "registry/src/ui/components/NotificationInbox/index.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/components/NotificationInbox/index.ts"
+        },
+        {
+          "path": "registry/src/ui/components/Spinner/Spinner.module.css",
+          "type": "registry:file",
+          "target": "~/src/ui/components/Spinner/Spinner.module.css"
+        },
+        {
+          "path": "registry/src/ui/components/Spinner/Spinner.tsx",
+          "type": "registry:file",
+          "target": "~/src/ui/components/Spinner/Spinner.tsx"
+        },
+        {
+          "path": "registry/src/ui/components/Spinner/index.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/components/Spinner/index.ts"
+        },
+        {
+          "path": "registry/src/ui/icons/icons.module.css",
+          "type": "registry:file",
+          "target": "~/src/ui/icons/icons.module.css"
+        },
+        {
+          "path": "registry/src/ui/icons/icons.tsx",
+          "type": "registry:file",
+          "target": "~/src/ui/icons/icons.tsx"
+        },
+        {
+          "path": "registry/src/ui/internal/cx.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/cx.ts"
+        },
+        {
+          "path": "registry/src/ui/internal/feel.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/feel.ts"
+        },
+        {
+          "path": "registry/src/ui/internal/liquidPath.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/liquidPath.ts"
+        },
+        {
+          "path": "registry/src/ui/internal/motion.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/motion.ts"
+        },
+        {
+          "path": "registry/src/ui/internal/motion/liquidMatter.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/motion/liquidMatter.ts"
+        },
+        {
+          "path": "registry/src/ui/internal/motion/notificationInbox.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/motion/notificationInbox.ts"
+        },
+        {
+          "path": "registry/src/ui/internal/motion/softPress.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/motion/softPress.ts"
+        },
+        {
+          "path": "registry/src/ui/internal/relativeTime.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/relativeTime.ts"
+        },
+        {
+          "path": "registry/src/ui/internal/softPress.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/softPress.ts"
         },
         {
           "path": "registry/src/ui/internal/useControllable.ts",
@@ -5029,6 +5593,132 @@
           "path": "registry/src/ui/internal/usePresence.ts",
           "type": "registry:file",
           "target": "~/src/ui/internal/usePresence.ts"
+        },
+        {
+          "path": "registry/src/ui/tokens.css",
+          "type": "registry:file",
+          "target": "~/src/ui/tokens.css"
+        }
+      ]
+    },
+    {
+      "name": "video-player",
+      "type": "registry:item",
+      "title": "VideoPlayer",
+      "description": "Quiet controls over a native video: seek, volume, captions, speed, full screen and picture in picture. The controls fade while it plays.",
+      "registryDependencies": [
+        "hilmanhaikal/gooee-ui/core"
+      ],
+      "files": [
+        {
+          "path": "registry/src/ui/components/Button/Button.module.css",
+          "type": "registry:file",
+          "target": "~/src/ui/components/Button/Button.module.css"
+        },
+        {
+          "path": "registry/src/ui/components/Button/Button.tsx",
+          "type": "registry:file",
+          "target": "~/src/ui/components/Button/Button.tsx"
+        },
+        {
+          "path": "registry/src/ui/components/Button/index.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/components/Button/index.ts"
+        },
+        {
+          "path": "registry/src/ui/components/Spinner/Spinner.module.css",
+          "type": "registry:file",
+          "target": "~/src/ui/components/Spinner/Spinner.module.css"
+        },
+        {
+          "path": "registry/src/ui/components/Spinner/Spinner.tsx",
+          "type": "registry:file",
+          "target": "~/src/ui/components/Spinner/Spinner.tsx"
+        },
+        {
+          "path": "registry/src/ui/components/Spinner/index.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/components/Spinner/index.ts"
+        },
+        {
+          "path": "registry/src/ui/components/VideoPlayer/SpeedMenu.module.css",
+          "type": "registry:file",
+          "target": "~/src/ui/components/VideoPlayer/SpeedMenu.module.css"
+        },
+        {
+          "path": "registry/src/ui/components/VideoPlayer/SpeedMenu.tsx",
+          "type": "registry:file",
+          "target": "~/src/ui/components/VideoPlayer/SpeedMenu.tsx"
+        },
+        {
+          "path": "registry/src/ui/components/VideoPlayer/VideoPlayer.module.css",
+          "type": "registry:file",
+          "target": "~/src/ui/components/VideoPlayer/VideoPlayer.module.css"
+        },
+        {
+          "path": "registry/src/ui/components/VideoPlayer/VideoPlayer.tsx",
+          "type": "registry:file",
+          "target": "~/src/ui/components/VideoPlayer/VideoPlayer.tsx"
+        },
+        {
+          "path": "registry/src/ui/components/VideoPlayer/index.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/components/VideoPlayer/index.ts"
+        },
+        {
+          "path": "registry/src/ui/components/VideoPlayer/media.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/components/VideoPlayer/media.ts"
+        },
+        {
+          "path": "registry/src/ui/icons/icons.module.css",
+          "type": "registry:file",
+          "target": "~/src/ui/icons/icons.module.css"
+        },
+        {
+          "path": "registry/src/ui/icons/icons.tsx",
+          "type": "registry:file",
+          "target": "~/src/ui/icons/icons.tsx"
+        },
+        {
+          "path": "registry/src/ui/internal/cx.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/cx.ts"
+        },
+        {
+          "path": "registry/src/ui/internal/feel.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/feel.ts"
+        },
+        {
+          "path": "registry/src/ui/internal/liquidPath.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/liquidPath.ts"
+        },
+        {
+          "path": "registry/src/ui/internal/motion.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/motion.ts"
+        },
+        {
+          "path": "registry/src/ui/internal/motion/liquidMatter.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/motion/liquidMatter.ts"
+        },
+        {
+          "path": "registry/src/ui/internal/motion/media.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/motion/media.ts"
+        },
+        {
+          "path": "registry/src/ui/internal/motion/softPress.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/motion/softPress.ts"
+        },
+        {
+          "path": "registry/src/ui/internal/softPress.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/softPress.ts"
         },
         {
           "path": "registry/src/ui/tokens.css",

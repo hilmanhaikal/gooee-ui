@@ -1,0 +1,124 @@
+/* Gooee UI, MIT licence. https://gooee.dev */
+@layer gooee.components {
+.root {
+  position: relative;
+  flex: none;
+}
+
+.scrim {
+  --fg: var(--gooee-color-scrim-fg);
+  --hover: var(--gooee-color-scrim-hover);
+}
+
+.surface {
+  --fg: var(--gooee-color-fg);
+  --hover: var(--gooee-color-surface-hover);
+}
+
+/* Like the player's buttons: a 44px touch area, with the fill at a small control's height inside it. */
+.button {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-width: var(--gooee-hit-min);
+  height: var(--gooee-hit-min);
+  padding: 0 var(--gooee-space-3);
+  border: 0;
+  background: transparent;
+  color: var(--fg);
+  font-size: var(--gooee-text-sm);
+  font-weight: var(--gooee-weight-semibold);
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  isolation: isolate;
+  transition: transform var(--gooee-motion-slow) var(--gooee-ease-morph);
+}
+
+.button::before {
+  content: "";
+  position: absolute;
+  inset: calc((var(--gooee-hit-min) - var(--gooee-control-h-sm)) / 2) 0;
+  z-index: -1;
+  border-radius: var(--gooee-radius-full);
+  transition: background-color var(--gooee-motion-fast) var(--gooee-ease-morph);
+}
+
+@media (hover: hover) {
+  .button:hover::before { background: var(--hover); }
+}
+.button:active { transform: scale(0.9); transition-duration: var(--gooee-motion-instant); }
+
+.button:focus-visible { outline: none; }
+.button:focus-visible::before { box-shadow: inset 0 0 0 var(--gooee-focus-width) var(--fg); }
+
+.menu {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + var(--gooee-space-2));
+  z-index: var(--gooee-z-popover);
+  display: flex;
+  flex-direction: column;
+  min-width: calc(var(--gooee-hit-min) * 2.5);
+  padding: calc(var(--gooee-space-2) - var(--gooee-line));
+  border: var(--gooee-line) solid var(--gooee-color-border);
+  border-radius: var(--gooee-radius-md);
+  background: var(--gooee-color-surface);
+  box-shadow: var(--gooee-shadow-3);
+  color: var(--gooee-color-fg);
+  transform-origin: bottom right;
+  animation: menuIn var(--gooee-motion-base) var(--gooee-ease-morph);
+}
+
+.surface .menu {
+  top: calc(100% + var(--gooee-space-2));
+  bottom: auto;
+  transform-origin: top right;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--gooee-space-3);
+  min-height: var(--gooee-hit-min);
+  padding: 0 var(--gooee-space-4) 0 var(--gooee-space-3);
+  border: 0;
+  border-radius: max(0px, calc(var(--gooee-radius-md) - var(--gooee-space-2)));
+  background: transparent;
+  color: inherit;
+  font-size: var(--gooee-text-sm);
+  font-variant-numeric: tabular-nums;
+  text-align: left;
+  cursor: pointer;
+}
+
+@media (hover: hover) {
+  .item:hover { background: var(--gooee-color-surface-hover); }
+}
+
+.item:focus-visible {
+  outline: none;
+  background: var(--gooee-color-surface-hover);
+  box-shadow: inset 0 0 0 var(--gooee-focus-width) var(--gooee-color-fg);
+}
+
+.check {
+  width: var(--gooee-icon-sm);
+  height: var(--gooee-icon-sm);
+}
+
+.item[aria-checked="true"] { font-weight: var(--gooee-weight-semibold); }
+
+.item[aria-checked="true"] .check::before {
+  content: "";
+  display: block;
+  width: var(--gooee-dot);
+  height: var(--gooee-dot);
+  margin: calc((var(--gooee-icon-sm) - var(--gooee-dot)) / 2);
+  border-radius: var(--gooee-radius-full);
+  background: currentColor;
+}
+
+@keyframes menuIn {
+  from { opacity: 0; transform: translateY(var(--gooee-shift-sm)) scale(var(--gooee-pop-scale)); }
+}
+}

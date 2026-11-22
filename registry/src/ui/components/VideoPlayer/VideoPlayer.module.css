@@ -1,0 +1,355 @@
+/* Gooee UI, MIT licence. https://gooee.dev */
+@layer gooee.components {
+.root {
+  position: relative;
+  container-type: inline-size;
+  width: 100%;
+  aspect-ratio: var(--ratio);
+  border-radius: var(--gooee-radius-md);
+  background: var(--gooee-color-scrim);
+  color: var(--gooee-color-scrim-fg);
+  outline: none;
+  isolation: isolate;
+}
+
+.root:focus-visible { box-shadow: var(--gooee-focus-ring); }
+.root[data-idle] { cursor: none; }
+
+.root[data-fullscreen] {
+  aspect-ratio: auto;
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+}
+
+.video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  object-fit: contain;
+}
+
+/* Behind the video, so the poster covers it as soon as it paints. */
+.posterPlaceholder {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: blur(var(--gooee-blur));
+  clip-path: inset(0 round var(--gooee-radius-md));
+  pointer-events: none;
+  transition: opacity var(--gooee-motion-slower) var(--gooee-ease-morph);
+}
+
+.posterPlaceholder[data-status="loaded"] { opacity: 0; transition-delay: var(--gooee-motion-base); }
+.root[data-fullscreen] .posterPlaceholder { clip-path: none; }
+
+.bigPlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  place-items: center;
+  width: var(--gooee-video-player-big-play, 64px);
+  height: var(--gooee-video-player-big-play, 64px);
+  margin: calc(var(--gooee-video-player-big-play, 64px) / -2) 0 0 calc(var(--gooee-video-player-big-play, 64px) / -2);
+  padding: 0;
+  border: 0;
+  border-radius: var(--gooee-radius-full);
+  background: var(--gooee-video-player-bar, color-mix(in srgb, var(--gooee-color-scrim) 69.5652%, transparent));
+  color: var(--gooee-color-scrim-fg);
+  font-size: var(--gooee-icon-xl);
+  cursor: pointer;
+  transition: transform var(--gooee-motion-slow) var(--gooee-ease-morph);
+}
+
+@media (hover: hover) {
+  .bigPlay:hover { transform: scale(1.06); }
+}
+.bigPlay:active { transform: scale(var(--gooee-press-scale)); }
+
+.buffering {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--gooee-color-scrim-fg);
+  pointer-events: none;
+}
+
+.error {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gooee-space-3);
+  padding: var(--gooee-space-4);
+  border-radius: inherit;
+  background: var(--gooee-color-scrim);
+  color: var(--gooee-color-scrim-fg);
+  text-align: center;
+}
+
+.errorText {
+  margin: 0;
+  font-size: var(--gooee-text-sm);
+}
+
+.controls {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 0 var(--gooee-space-2) var(--gooee-space-1);
+  border-radius: 0 0 var(--gooee-radius-md) var(--gooee-radius-md);
+  background: var(--gooee-video-player-bar, color-mix(in srgb, var(--gooee-color-scrim) 69.5652%, transparent));
+  transition:
+    opacity var(--gooee-motion-base) var(--gooee-ease-morph),
+    transform var(--gooee-motion-base) var(--gooee-ease-morph);
+}
+
+.root[data-fullscreen] .controls {
+  border-radius: 0;
+  padding-bottom: calc(var(--gooee-space-1) + env(safe-area-inset-bottom));
+}
+
+.controls[data-hidden] {
+  opacity: 0;
+  transform: translateY(var(--gooee-shift-md));
+  /* A tap here falls through to the video, which wakes the controls. */
+  pointer-events: none;
+}
+
+/* Captions sit near the bottom, and step up above the controls while they show. */
+.captions {
+  --bar: calc(var(--gooee-hit-min) * 1.5 + var(--gooee-space-1));
+  position: absolute;
+  inset-inline: var(--gooee-space-6);
+  bottom: var(--gooee-space-5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gooee-space-1);
+  text-align: center;
+  pointer-events: none;
+  transition: bottom var(--gooee-motion-base) var(--gooee-ease-morph);
+}
+
+.captions[data-raised] { bottom: calc(var(--bar) + var(--gooee-space-3)); }
+
+.root[data-fullscreen] .captions { bottom: calc(var(--gooee-space-8) + env(safe-area-inset-bottom)); }
+.root[data-fullscreen] .captions[data-raised] { bottom: calc(var(--bar) + var(--gooee-space-4) + env(safe-area-inset-bottom)); }
+
+.cue {
+  max-width: 100%;
+  padding: var(--gooee-space-1) var(--gooee-space-3);
+  border-radius: var(--gooee-radius-sm);
+  background: var(--gooee-video-player-bar, color-mix(in srgb, var(--gooee-color-scrim) 69.5652%, transparent));
+  color: var(--gooee-color-scrim-fg);
+  font-size: var(--gooee-text-md);
+  line-height: var(--gooee-leading-snug);
+  overflow-wrap: break-word;
+}
+
+.root[data-fullscreen] .cue { font-size: var(--gooee-text-xl); }
+
+.bar {
+  display: flex;
+  align-items: center;
+  gap: var(--gooee-space-1);
+  min-width: 0;
+}
+
+/* The box is the 44px touch area; the fill you see is a small control's size inside it. */
+.btn {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: var(--gooee-hit-min);
+  height: var(--gooee-hit-min);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--gooee-color-scrim-fg);
+  font-size: var(--gooee-icon-lg);
+  cursor: pointer;
+  isolation: isolate;
+  transition: transform var(--gooee-motion-slow) var(--gooee-ease-morph);
+}
+
+.btn::before {
+  content: "";
+  position: absolute;
+  inset: calc((var(--gooee-hit-min) - var(--gooee-control-h-sm)) / 2);
+  z-index: -1;
+  border-radius: var(--gooee-radius-full);
+  transition: background-color var(--gooee-motion-fast) var(--gooee-ease-morph);
+}
+
+@media (hover: hover) {
+  .btn:hover::before { background: var(--gooee-color-scrim-hover); }
+}
+.btn:active { transform: scale(0.9); transition-duration: var(--gooee-motion-instant); }
+/* The press shrinks the button, so an invisible layer keeps the whole box under a mouse released at its edge. */
+.btn:active::after { content: ""; position: absolute; inset: -9%; }
+
+.btn:focus-visible { outline: none; }
+.btn:focus-visible::before { box-shadow: inset 0 0 0 var(--gooee-focus-width) var(--gooee-color-scrim-fg); }
+
+/* A toggle that is on turns solid, light with a dark icon, so it never looks like a hover */
+.btn[aria-pressed="true"] { color: var(--gooee-gray-950); }
+.btn[aria-pressed="true"]::before { background: var(--gooee-color-scrim-fg); }
+.btn[aria-pressed="true"]:focus-visible::before { box-shadow: inset 0 0 0 var(--gooee-focus-width) var(--gooee-gray-950); }
+
+.volume {
+  display: flex;
+  align-items: center;
+}
+
+.volumeRange {
+  width: var(--gooee-video-player-volume-w, 88px);
+  margin: 0 var(--gooee-space-3) 0 var(--gooee-space-1);
+}
+
+.time {
+  padding: 0 var(--gooee-space-3);
+  font-size: var(--gooee-text-sm);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.spacer { flex: 1; }
+
+/* Range: a see-through native input on top of a drawn track, for keyboard, touch and screen readers */
+.range {
+  --thumb: calc(var(--gooee-video-player-seek-h-active, 6px) * 2);
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: var(--gooee-hit-min);
+}
+
+.seek {
+  height: calc(var(--gooee-hit-min) / 2);
+  margin: 0 var(--gooee-space-3);
+}
+
+.rangeInput {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.seek .rangeInput {
+  top: calc(var(--gooee-hit-min) / -4);
+  bottom: calc(var(--gooee-hit-min) / -4);
+  height: auto;
+}
+
+.rangeInput:disabled { cursor: default; }
+
+.track {
+  position: relative;
+  width: 100%;
+  height: var(--gooee-video-player-seek-h, 4px);
+  border-radius: var(--gooee-radius-full);
+  background: var(--gooee-color-scrim-hover);
+  transition: height var(--gooee-motion-fast) var(--gooee-ease-morph);
+}
+
+@media (hover: hover) {
+  .range:hover .track { height: var(--gooee-video-player-seek-h-active, 6px); }
+}
+.rangeInput:focus-visible + .track { height: var(--gooee-video-player-seek-h-active, 6px); }
+
+.buffered,
+.fill {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  transform-origin: left center;
+}
+
+.buffered {
+  background: var(--gooee-color-scrim-fg-muted);
+  opacity: 0.4;
+  transform: scaleX(var(--b, 0));
+}
+
+.fill {
+  background: var(--gooee-color-scrim-fg);
+  transform: scaleX(var(--p, 0));
+}
+
+.thumb {
+  position: absolute;
+  top: 50%;
+  left: calc(var(--p, 0) * 100%);
+  width: var(--thumb);
+  height: var(--thumb);
+  margin: calc(var(--thumb) / -2) 0 0 calc(var(--thumb) / -2);
+  border-radius: var(--gooee-radius-full);
+  background: var(--gooee-color-scrim-fg);
+  transform: scale(0);
+  transition: transform var(--gooee-motion-base) var(--gooee-ease-morph);
+}
+
+@media (hover: hover) {
+  .range:hover .thumb { transform: scale(1); }
+}
+
+/* Touch has no hover to reveal it, so the seek thumb always shows there. */
+@media (hover: none) {
+  .thumb { transform: scale(1); }
+}
+
+.rangeInput:focus-visible + .track .thumb {
+  transform: scale(1);
+  outline: var(--gooee-focus-width) solid var(--gooee-color-scrim-fg);
+  outline-offset: var(--gooee-focus-width);
+}
+
+.sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@container (max-width: 520px) {
+  .volumeRange { display: none; }
+}
+
+/* Small frames: the bar's play button is enough, the big one would cover the bar */
+@container (max-width: 420px) {
+  .bigPlay { display: none; }
+}
+
+@container (max-width: 360px) {
+  .pip { display: none; }
+  .time { padding: 0 var(--gooee-space-2); font-size: var(--gooee-text-xs); }
+}
+
+/* Five 44px buttons and the time do not fit one row here, so the time gets its own line under the seek bar. */
+@container (max-width: 320px) {
+  .bar { flex-wrap: wrap; }
+  .time { order: -1; flex-basis: 100%; padding: 0 var(--gooee-space-3); }
+}
+}

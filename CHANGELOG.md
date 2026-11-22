@@ -2,6 +2,20 @@
 
 What changed in Gooee UI (called hlmnhkl/ui until 0.40.0) for people who use it: components, blocks, templates, themes, tokens and the `npx gooee add` command. Newest first.
 
+## 1.4.0 · November 2026
+
+Image, Lightbox, ImageCropper, VideoPlayer and NotificationInbox are free now, with their blurred previews.
+
+### Highlights
+
+- **Five parts are free**: Image, Lightbox, ImageCropper, VideoPlayer and NotificationInbox.
+- **Blurred previews** while photos load are now in the free package.
+- **NotificationBell** shows its full count in Vue too.
+
+### Changed
+
+- Image, Lightbox, ImageCropper, VideoPlayer and NotificationInbox (with NotificationBell) moved from Pro to free. `npx gooee add` copies them, in React and Vue. Gooee now has 77 free parts and 75 Pro.
+
 ## 1.3.0 · November 2026
 
 Photos can show a blurred preview while they load, in Lightbox, ImageCropper and VideoPlayer.

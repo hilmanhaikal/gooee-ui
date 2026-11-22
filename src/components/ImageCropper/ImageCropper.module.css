@@ -1,0 +1,113 @@
+@layer gooee.components {
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gooee-space-5);
+  min-width: 0;
+}
+
+/* The page must not scroll or zoom while a finger moves the photo. */
+.stage {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: var(--gooee-radius-md);
+  background: var(--gooee-color-surface-sunken);
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.stage[data-active] { cursor: grabbing; }
+.stage:focus-visible { outline: none; box-shadow: var(--gooee-focus-ring); }
+
+/* Hides once the photo's size is known (data-ready), as the photo fades in over it. */
+.placeholder {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(var(--gooee-blur));
+  pointer-events: none;
+  transition: opacity var(--gooee-motion-slower) var(--gooee-ease-morph);
+}
+
+.stage[data-ready] .placeholder { opacity: 0; transition-delay: var(--gooee-motion-base); }
+
+/* Its top left corner sits at the frame's centre, then it moves back by the crop point. */
+.img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  max-width: none;
+  pointer-events: none;
+  opacity: 0;
+  transition:
+    opacity var(--gooee-motion-base) var(--gooee-ease-morph),
+    width var(--gooee-motion-fast) var(--gooee-ease-morph),
+    height var(--gooee-motion-fast) var(--gooee-ease-morph),
+    transform var(--gooee-motion-fast) var(--gooee-ease-morph);
+}
+
+.stage[data-ready] .img { opacity: 1; }
+.stage[data-active] .img { transition: opacity var(--gooee-motion-base) var(--gooee-ease-morph); }
+
+.guides {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 var(--gooee-line) var(--gooee-color-border);
+  pointer-events: none;
+}
+
+.stage[data-round] .guides {
+  background: radial-gradient(circle closest-side, transparent calc(100% - var(--gooee-line)), color-mix(in srgb, var(--gooee-color-scrim) 55%, transparent) 100%);
+}
+
+/* Rule of thirds lines, only while the photo is held. */
+.guides::before,
+.guides::after {
+  content: "";
+  position: absolute;
+  opacity: 0;
+  transition: opacity var(--gooee-motion-fast) var(--gooee-ease-morph);
+}
+
+.guides::before {
+  inset-block: 0;
+  inset-inline: 33.333%;
+  border-inline: var(--gooee-line) solid var(--gooee-color-scrim-fg-muted);
+}
+
+.guides::after {
+  inset-inline: 0;
+  inset-block: 33.333%;
+  border-block: var(--gooee-line) solid var(--gooee-color-scrim-fg-muted);
+}
+
+.stage[data-active] .guides::before,
+.stage[data-active] .guides::after { opacity: 1; }
+
+.zoom {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--gooee-space-3);
+}
+
+/* Centred on the slider's track, which is one hit area tall. */
+.zoom > button { margin-block-end: calc((var(--gooee-hit-min) - var(--gooee-control-h-md)) / 2); }
+
+.slider { flex: 1; }
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+}

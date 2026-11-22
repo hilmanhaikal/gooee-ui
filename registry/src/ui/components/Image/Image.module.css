@@ -1,0 +1,116 @@
+/* Gooee UI, MIT licence. https://gooee.dev */
+@layer gooee.components {
+.root {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  background: var(--gooee-color-surface-sunken);
+  isolation: isolate;
+}
+
+.rounded { border-radius: var(--gooee-radius-md); }
+
+.root[data-status="loading"]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, var(--gooee-color-shimmer), transparent);
+  transform: translateX(-100%);
+  animation: shimmer var(--gooee-motion-shimmer) var(--gooee-ease-in-out) infinite;
+  pointer-events: none;
+}
+
+.root:has(.placeholder)[data-status="loading"]::after { display: none; }
+
+.placeholder,
+.img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* No ratio to reserve space, so the image sets the height itself. */
+.flow .img {
+  position: static;
+  display: block;
+  height: auto;
+}
+
+.flow .fallback { position: relative; }
+
+.placeholder {
+  object-fit: cover;
+  filter: blur(var(--gooee-blur));
+  transform: scale(1.1);
+  transition: opacity var(--gooee-motion-slower) var(--gooee-ease-morph);
+}
+
+.img {
+  opacity: 0;
+  filter: blur(var(--gooee-blur));
+  transform: scale(1.03);
+  transition:
+    opacity var(--gooee-motion-slower) var(--gooee-ease-morph),
+    filter var(--gooee-motion-slower) var(--gooee-ease-morph),
+    transform var(--gooee-motion-slower) var(--gooee-ease-morph);
+}
+
+.root[data-status="loaded"] .img {
+  opacity: 1;
+  filter: none;
+  transform: none;
+}
+
+.root[data-status="loaded"] .placeholder { opacity: 0; transition-delay: var(--gooee-motion-base); }
+.root[data-instant] .img,
+.root[data-instant] .placeholder { transition: none; }
+
+.fallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gooee-space-3);
+  padding: var(--gooee-space-5);
+  color: var(--gooee-color-fg-muted);
+  text-align: center;
+  animation: fadeIn var(--gooee-motion-base) var(--gooee-ease-morph);
+}
+
+.fallbackBody {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gooee-space-3);
+  max-width: 100%;
+}
+
+.fallbackIcon {
+  width: var(--gooee-icon-xl);
+  height: var(--gooee-icon-xl);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.fallbackText {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--gooee-text-sm);
+}
+
+@keyframes shimmer {
+  to { transform: translateX(100%); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+}
+}
