@@ -137,6 +137,12 @@
   padding: var(--gooee-space-7);
 }
 
+/* A small panel has room for two actions side by side by a few pixels only. A denser theme or a longer
+   word would wrap them into two uneven rows, so its actions always stack at full width, the main one on
+   top, as they do on a phone. */
+.sm .footer { flex-direction: column-reverse; }
+.sm .footer > * { width: 100%; }
+
 .header:last-child { padding-bottom: var(--gooee-space-7); }
 .body:last-child { padding-bottom: var(--gooee-space-7); }
 

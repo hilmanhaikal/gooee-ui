@@ -2,6 +2,22 @@
 
 What changed in Gooee UI for people who use it: components, blocks, templates, themes, tokens and the `npx gooee add` command. Newest first.
 
+## 1.5.1 · November 2026
+
+KanbanBoard scrolls when a card is held at its edge, and a small Dialog stacks its buttons.
+
+### Changed
+
+- Docs: two page headers, down from five. Block and theme pages open like a part's page, with the group and tier above a large name. Guides, Tokens and What's new share one quieter title, each with a breadcrumb.
+
+### Fixed
+
+- KanbanBoard: a card held at the left or right edge now scrolls the board, in React and Vue. The board's column snap used to pull every step back, so it never moved. After the drop the board settles on the nearest column.
+- Dialog: a small dialog (`size="sm"`) stacks its actions at full width, the main one on top. Side by side they fitted by a few pixels only, so a denser theme or a longer word wrapped them into two uneven rows.
+- Docs: a framed preview no longer grows without end when its page is taller than its own window. The Glass theme page had reached 16,000px.
+- Docs: on a phone or tablet, search opens at the top of the screen, with the field first and the results under it. It used to sit at the bottom, where the keyboard covered it, the results would not scroll and the page could stay shifted.
+- Docs: in the phone menu, one fill slides between Docs, Components, Blocks and Resources. It used to jump.
+
 ## 1.5.0 · November 2026
 
 ScrollArea's thumb is a drop now: it stretches with scroll speed and squashes when it lands on an end.
