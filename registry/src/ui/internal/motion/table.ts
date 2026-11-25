@@ -41,8 +41,10 @@ export const nextSort = (sort: TableSort | null, key: string): TableSort | null 
 export function scrollEdges(el: HTMLElement) {
   // The sticky first column's width, so a cell that takes focus scrolls clear of it (WCAG 2.4.11).
   const first = el.querySelector<HTMLElement>('thead th')
-  el.style.setProperty('--first-w', first && getComputedStyle(first).left === '0px' ? `${first.offsetWidth}px` : '0px')
-  return { start: el.scrollLeft > 1, end: el.scrollLeft + el.clientWidth < el.scrollWidth - 1 }
+  el.style.setProperty('--first-w', first && getComputedStyle(first).insetInlineStart === '0px' ? `${first.offsetWidth}px` : '0px')
+  // From the start edge: on a right-to-left page scrollLeft runs from 0 into negative numbers.
+  const at = Math.abs(el.scrollLeft)
+  return { start: at > 1, end: at + el.clientWidth < el.scrollWidth - 1 }
 }
 
 /**
@@ -54,7 +56,15 @@ export function revealCell(el: HTMLElement, target: EventTarget | null) {
   if (!cell || cell === cell.parentElement?.firstElementChild) return
   const box = el.getBoundingClientRect()
   const r = cell.getBoundingClientRect()
-  const under = r.left - box.left - (parseFloat(el.style.getPropertyValue('--first-w')) || 0)
+  const firstW = parseFloat(el.style.getPropertyValue('--first-w')) || 0
+  // The sticky first column is at the start edge: the left, or the right on a right-to-left page.
+  if (getComputedStyle(el).direction === 'rtl') {
+    const under = r.right - (box.right - firstW)
+    if (under > 0) el.scrollLeft += under
+    else if (r.left < box.left) el.scrollLeft += r.left - box.left
+    return
+  }
+  const under = r.left - box.left - firstW
   if (under < 0) el.scrollLeft += under
   else if (r.right > box.right) el.scrollLeft += r.right - box.right
 }

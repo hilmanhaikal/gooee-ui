@@ -6,6 +6,8 @@ import { dismissable } from '../../internal/motion/layers'
 import { createMorph } from '../../internal/motion/liquid'
 import { createEdgeFlow } from '../../internal/motion/liquidMore'
 import { createListbox } from '../../internal/motion/listbox'
+import { byGroup } from '../../internal/motion/optionList'
+import OptionList from '../../internal/OptionList.vue'
 import { setNativeValue, useField, useMirror } from '../../internal/vue/useField'
 import { useFloating } from '../../internal/vue/useFloating'
 import { usePresence } from '../../internal/vue/usePresence'
@@ -14,19 +16,28 @@ import styles from './Select.module.css'
 
 // The Vue Select: the same look (Select.module.css), list morph, focus edge and keys as the React one.
 
-export type SelectOption = { value: string; label: string; disabled?: boolean; hint?: string }
+export type SelectOption = {
+  value: string
+  label: string
+  disabled?: boolean
+  hint?: string
+  /** Name of the group the option sits under. Options of a group are shown together. */
+  group?: string
+}
 
 export type SelectLabels = {
   /** Shown in the open list when there are no options. */
   empty: string
+  /** The first row of a clearable list, which chooses nothing. */
+  none: string
 }
 
-const { hideLabel = false, options, defaultValue = null, placeholder = 'Choose one', help, error, labels: labelsProp, disabled, readOnly, name, id } = defineProps<{
+const { hideLabel = false, options, defaultValue = null, placeholder = 'Choose one', help, error, labels: labelsProp, disabled, readOnly, name, id, required, clearable = false } = defineProps<{
   /** Visible name of the field, also read by screen readers. */
   label: string
   /** Keeps the label for screen readers only, for a list where a column heading already names the field. */
   hideLabel?: boolean
-  /** Choices in the list, in order. */
+  /** Choices in the list, in order. A long list draws only the options in view. The option slot draws an option's content. */
   options: SelectOption[]
   /** Starting value when there is no v-model. */
   defaultValue?: string | null
@@ -48,12 +59,21 @@ const { hideLabel = false, options, defaultValue = null, placeholder = 'Choose o
   readOnly?: boolean
   /** Id of the button, so a label's `for` can point at it. Inner ids add a suffix to it. */
   id?: string
+  /** Adds "None" as the first row, so a choice can be taken back: it sets v-model to null. Not shown when required. */
+  clearable?: boolean
 }>()
 const emit = defineEmits<{
   /** Focus left the field, so vee-validate's handleBlur runs. */
   blur: [event: FocusEvent]
 }>()
-const labels = computed<SelectLabels>(() => ({ empty: 'No options', ...labelsProp }))
+defineSlots<{
+  /** Draws an option's content in the list, such as an icon before the label. The check mark stays. Defaults to the label and hint. */
+  option?(props: { option: SelectOption; selected: boolean; active: boolean }): unknown
+}>()
+const labels = computed<SelectLabels>(() => ({ empty: 'No options', none: 'None', ...labelsProp }))
+// A clearable list starts with "None", whose value '' stands for null, as an empty native select does.
+const withNone = computed(() => clearable && !required)
+const rows = computed<SelectOption[]>(() => (withNone.value ? [{ value: '', label: labels.value.none }, ...byGroup(options)] : byGroup(options)))
 
 /** The selected value. Use v-model, or leave it out and the field keeps its own. Null means nothing is chosen. */
 const model = defineModel<string | null>()
@@ -88,15 +108,14 @@ const open = ref(false)
 const active = ref(-1)
 const trigger = ref<HTMLButtonElement | null>(null)
 const listEl = ref<HTMLElement | null>(null)
-const optionEls: Array<HTMLElement | null> = []
 const { mounted, state } = usePresence(open, 'morph-out')
 const { style, side, ready } = useFloating(trigger, listEl, mounted, { side: 'bottom', align: 'start', offset: 6, matchWidth: true })
 // Vue, unlike React, adds no px to a number in a style.
-const selectedIndex = computed(() => options.findIndex((o) => o.value === value.value))
-const selected = computed(() => (selectedIndex.value >= 0 ? options[selectedIndex.value] : null))
+const selectedIndex = computed(() => rows.value.findIndex((o) => o.value === (value.value ?? (withNone.value ? '' : null))))
+const selected = computed(() => (value.value === null ? null : (options.find((o) => o.value === value.value) ?? null)))
 
 // Arrows, Home, End, Enter, Space, Tab and type-ahead (motion/listbox.ts).
-const list = createListbox(() => options)
+const list = createListbox(() => rows.value)
 const { enabled, first } = list
 
 const openList = (at?: number) => {
@@ -110,14 +129,14 @@ const close = (focusTrigger = true) => {
 }
 // A person's choice: the hidden input fires a real change event first.
 const commit = (next: string) => {
-  if (next === value.value) return
+  if (next === (value.value ?? '')) return
   if (input.value) setNativeValue(input.value, next)
-  value.value = next
+  value.value = next || null
   form.changed()
 }
 const choose = (i: number) => {
   if (!enabled(i)) return
-  commit(options[i].value)
+  commit(rows.value[i].value)
   close()
 }
 const onBlur = (e: FocusEvent) => {
@@ -134,7 +153,7 @@ const onKeyDown = (e: KeyboardEvent) => {
   else if (r.active !== undefined) active.value = r.active
   if (r.choose) choose(active.value)
   if (r.tab) {
-    if (enabled(active.value)) commit(options[active.value].value)
+    if (enabled(active.value)) commit(rows.value[active.value].value)
     open.value = false
   }
 }
@@ -159,20 +178,6 @@ watch(
   (now) => {
     undismiss()
     undismiss = now ? dismissable(() => [trigger.value, listEl.value], (reason) => close(reason === 'escape')) : () => {}
-  },
-  { flush: 'post' },
-)
-
-// One highlight glides between the options.
-const hl = ref<{ top: number; height: number } | null>(null)
-watch(
-  [active, open, mounted],
-  () => {
-    if (!open.value) return (hl.value = null)
-    const el = optionEls[active.value]
-    if (!el) return
-    hl.value = { top: el.offsetTop, height: el.offsetHeight }
-    el.scrollIntoView({ block: 'nearest' })
   },
   { flush: 'post' },
 )
@@ -257,27 +262,32 @@ const describedBy = computed(
         :style="style"
         @mousedown.prevent
       >
-        <span v-if="hl" :class="styles.highlight" data-slot="select-highlight" :style="{ transform: `translateY(${hl.top}px)`, height: `${hl.height}px` }" aria-hidden="true" />
-        <div
-          v-for="(o, i) in options"
-          :id="`${baseId}-opt-${i}`"
-          :key="o.value"
-          :ref="(el) => (optionEls[i] = el as HTMLElement | null)"
-          role="option"
-          :aria-selected="o.value === value"
-          :aria-disabled="o.disabled || undefined"
-          :class="styles.option"
-          data-slot="select-option"
-          :data-highlighted="i === active || undefined"
-          :data-selected="o.value === value || undefined"
-          :data-disabled="o.disabled || undefined"
-          :style="{ '--i': Math.min(i, 12) }"
-          @pointermove="enabled(i) && active !== i && (active = i)"
-          @click="choose(i)"
-        >
-          <span :class="styles.optionText" data-slot="select-option-text">{{ o.label }}<span v-if="o.hint" :class="styles.hint" data-slot="select-option-hint">{{ o.hint }}</span></span>
-          <CheckIcon :class="styles.check" data-slot="select-option-indicator" />
-        </div>
+        <OptionList :options="rows" :active="open ? active : -1" :list="listEl" :highlight-class="styles.highlight" part="select" :base-id="baseId">
+          <template #default="{ option: o, index: i, attrs, at, setEl }">
+            <div
+              v-bind="attrs"
+              :id="`${baseId}-opt-${i}`"
+              :ref="setEl"
+              role="option"
+              :aria-selected="i === selectedIndex"
+              :aria-disabled="o.disabled || undefined"
+              :class="styles.option"
+              data-slot="select-option"
+              :data-highlighted="i === active || undefined"
+              :data-selected="i === selectedIndex || undefined"
+              :data-disabled="o.disabled || undefined"
+              :style="{ '--i': Math.min(i, 12), ...at }"
+              @pointermove="enabled(i) && active !== i && (active = i)"
+              @click="choose(i)"
+            >
+              <span :class="styles.optionText" data-slot="select-option-text">
+                <slot v-if="!(withNone && i === 0)" name="option" :option="o" :selected="i === selectedIndex" :active="i === active">{{ o.label }}<span v-if="o.hint" :class="styles.hint" data-slot="select-option-hint">{{ o.hint }}</span></slot>
+                <template v-else>{{ o.label }}</template>
+              </span>
+              <CheckIcon :class="styles.check" data-slot="select-option-indicator" />
+            </div>
+          </template>
+        </OptionList>
         <div v-if="empty" :id="emptyId" :class="styles.empty" data-slot="select-empty">
           {{ labels.empty }}
         </div>

@@ -1,6 +1,13 @@
 <script lang="ts">
 import type { Component } from 'vue'
 
+export type DropdownMenuRadioOption = {
+  value: string
+  label: string
+  shortcut?: string
+  disabled?: boolean
+}
+
 export type DropdownMenuEntry =
   | {
       type?: 'item'
@@ -9,33 +16,54 @@ export type DropdownMenuEntry =
       icon?: Component
       shortcut?: string
       onSelect?: () => void
+      /** Makes the item a link to this address. onSelect still runs first. */
+      href?: string
       disabled?: boolean
       /** Why the item is disabled. Shown as small text under the label while it is disabled. */
       disabledReason?: string
       /** Marks a destructive action in red and bold. Use a clear word too, such as "Delete". */
       destructive?: boolean
+      /** Turns the item into a submenu. */
+      items?: DropdownMenuEntry[]
+    }
+  | {
+      type: 'checkbox'
+      label: string
+      checked: boolean
+      onCheckedChange: (checked: boolean) => void
+      shortcut?: string
+      disabled?: boolean
+    }
+  | {
+      type: 'radio'
+      /** Visible name of the group. It also names the group for screen readers. */
+      label?: string
+      value: string
+      onValueChange: (value: string) => void
+      options: DropdownMenuRadioOption[]
     }
   | { type: 'separator' }
   | { type: 'label'; label: string }
 </script>
 
 <script setup lang="ts">
-import { computed, onBeforeUnmount, ref, shallowRef, useId, watch, type VNode } from 'vue'
+import { onBeforeUnmount, ref, shallowRef, useId, watch, type VNode } from 'vue'
 import type { Align } from '../../internal/motion/floating'
 import { dismissable } from '../../internal/motion/layers'
 import { createMorph } from '../../internal/motion/liquid'
 import { createBead } from '../../internal/motion/liquidMore'
-import { createMenuKeys, itemKey, menuButtonKey, menuItems } from '../../internal/motion/menuKeys'
+import { createMenuKeys, menuButtonKey, menuItems } from '../../internal/motion/menuKeys'
 import { useFloating } from '../../internal/vue/useFloating'
 import { usePresence } from '../../internal/vue/usePresence'
 import { cloneTrigger, elementRef, firstNode } from '../../internal/vue/trigger'
+import DropdownMenuPanel from './DropdownMenuPanel.vue'
 import styles from './DropdownMenu.module.css'
 
 // The Vue DropdownMenu: the same look (DropdownMenu.module.css), keys, growth and bead as the React one.
 // The trigger slot is one button that opens the menu. It gets the menu ARIA attributes, and an id if it has none.
 
 const { items, align = 'start' } = defineProps<{
-  /** Items, separators and group labels, in menu order. */
+  /** Items, checkbox and radio items, submenus, separators and group labels, in menu order. */
   items: DropdownMenuEntry[]
   /** Accessible name for the menu, if the trigger text is not enough. */
   label?: string
@@ -105,18 +133,6 @@ const onMenuKey = createMenuKeys(
   () => close(),
 )
 
-const select = (item: Extract<DropdownMenuEntry, { label: string; type?: 'item' }>) => {
-  if (item.disabled) return
-  close()
-  item.onSelect?.()
-}
-
-// Each item's place in the stagger, counting items only.
-const stagger = computed(() => {
-  let n = 0
-  return items.map((item) => (item.type === 'separator' || item.type === 'label' ? -1 : n++))
-})
-
 // A caller's id on the trigger wins, so their own labels and tests keep working. Read in the same render, after the trigger.
 let triggerId = `${id}-trigger`
 // The trigger is the slot's own element, given the menu's ARIA, click and keys, like React's cloneElement.
@@ -155,28 +171,7 @@ const labelledBy = () => triggerId
       :style="style"
       @keydown="onMenuKey"
     >
-      <template v-for="(item, i) in items" :key="i">
-        <div v-if="item.type === 'separator'" role="separator" data-slot="dropdown-menu-separator" :class="styles.separator" />
-        <div v-else-if="item.type === 'label'" role="presentation" data-slot="dropdown-menu-label" :class="styles.groupLabel">{{ item.label }}</div>
-        <div
-          v-else
-          role="menuitem"
-          tabindex="-1"
-          :aria-disabled="item.disabled || undefined"
-          data-slot="dropdown-menu-item"
-          :class="styles.item"
-          :data-disabled="item.disabled || undefined"
-          :data-destructive="item.destructive || undefined"
-          :style="{ '--i': Math.min(stagger[i], 12) }"
-          @pointermove="(e: PointerEvent) => !item.disabled && (e.currentTarget as HTMLElement).focus()"
-          @click="select(item)"
-          @keydown="itemKey"
-        >
-          <span v-if="item.icon" data-slot="dropdown-menu-item-icon" :class="styles.icon"><component :is="item.icon" /></span>
-          <span data-slot="dropdown-menu-item-label" :class="styles.label">{{ item.label }}<span v-if="item.disabled && item.disabledReason" data-slot="dropdown-menu-item-reason" :class="styles.reason">{{ item.disabledReason }}</span></span>
-          <kbd v-if="item.shortcut" data-slot="dropdown-menu-shortcut" :class="styles.shortcut">{{ item.shortcut }}</kbd>
-        </div>
-      </template>
+      <DropdownMenuPanel :entries="items" :id-base="id" @close="close()" />
     </div>
   </Teleport>
 </template>

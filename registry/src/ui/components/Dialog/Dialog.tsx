@@ -12,11 +12,14 @@ import { Portal } from '../../internal/Portal'
 import { usePresence } from '../../internal/usePresence'
 import styles from './Dialog.module.css'
 
+/** What asked the dialog to close: Esc, a tap outside, the close button, or a pull down on a phone. */
+export type DialogCloseReason = 'escape' | 'outside' | 'close-button' | 'drag'
+
 export type DialogProps = {
   /** Shows the dialog. You always control it. */
   open: boolean
-  /** Called with false when the close button, Esc or an outside tap asks to close. */
-  onOpenChange: (open: boolean) => void
+  /** Called with false when the close button, Esc, an outside tap or a pull down asks to close, and with what asked, so you can, say, keep a draft only when it was not the close button. */
+  onOpenChange: (open: boolean, reason: DialogCloseReason) => void
   /** Heading of the dialog. Also its accessible name. */
   title: ReactNode
   /** Short text under the title, read out when the dialog opens. */
@@ -66,13 +69,13 @@ export function Dialog({
   const grab = useDragClose(
     panelRef,
     open,
-    () => onOpenChange(false),
+    () => onOpenChange(false, 'drag'),
     (e) => window.matchMedia('(max-width: 599px)').matches && !!(e.target as HTMLElement).closest(`.${styles.handle}, .${styles.header}`),
   )
 
   useScrollLock(open)
-  useDismiss(open, [panelRef], () => onOpenChange(false), { outside: dismissOnOverlay })
-  useFocusTrap(panelRef, open && mounted, { initialFocus })
+  useDismiss(open, [panelRef], (reason) => onOpenChange(false, reason), { outside: dismissOnOverlay })
+  useFocusTrap(panelRef, open && mounted, { initialFocus, modal: true })
 
   if (!mounted) return null
   return (
@@ -97,7 +100,7 @@ export function Dialog({
               <h2 id={`${id}-title`} data-slot="dialog-title" className={styles.title}>{title}</h2>
               {description && <p id={`${id}-desc`} data-slot="dialog-description" className={styles.description}>{description}</p>}
             </div>
-            <button type="button" data-slot="dialog-close" className={styles.close} aria-label={labels.close} data-skip-initial-focus onClick={() => onOpenChange(false)}>
+            <button type="button" data-slot="dialog-close" className={styles.close} aria-label={labels.close} data-skip-initial-focus onClick={() => onOpenChange(false, 'close-button')}>
               <XIcon />
             </button>
           </header>

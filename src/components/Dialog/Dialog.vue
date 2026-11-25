@@ -14,6 +14,9 @@ export type DialogLabels = {
   close: string
 }
 
+/** What asked the dialog to close: Esc, a tap outside, the close button, or a pull down on a phone. */
+export type DialogCloseReason = 'escape' | 'outside' | 'close-button' | 'drag'
+
 const { description, size = 'md', dismissOnOverlay = true, labels: labelsProp, initialFocus } = defineProps<{
   /** Heading of the dialog. Also its accessible name. The title slot replaces it. */
   title?: string
@@ -37,7 +40,12 @@ const slots = defineSlots<{ default?: () => unknown; title?: () => unknown; desc
 const id = useId()
 const panel = ref<HTMLElement | null>(null)
 const hasDescription = computed(() => !!(description || slots.description))
-const close = () => (open.value = false)
+/** Says what asked the dialog to close, as it closes, so you can, say, keep a draft only when it was not the close button. */
+const emit = defineEmits<{ close: [reason: DialogCloseReason] }>()
+const close = (reason: DialogCloseReason) => {
+  open.value = false
+  emit('close', reason)
+}
 
 // Stays in the page through the fold, then leaves.
 const mounted = ref(open.value)
@@ -48,7 +56,7 @@ let leaving = 0
 const morph = createDialogMorph(() => panel.value)
 // On a phone the dialog is a bottom sheet, and the hand can pull it down to close.
 const drag = createDragClose(() => panel.value, {
-  onClose: close,
+  onClose: () => close('drag'),
   isOpen: () => open.value,
   can: (e) => window.matchMedia('(max-width: 599px)').matches && !!(e.target as HTMLElement).closest(`.${styles.handle}, .${styles.header}`),
 })
@@ -90,7 +98,7 @@ watch(
     stop()
     if (!open.value || !panel.value) return
     const el = panel.value
-    release.push(lockScroll(), dismissable(() => [el], close, { outside: dismissOnOverlay }), trapFocus(el, { initialFocus }))
+    release.push(lockScroll(), dismissable(() => [el], (reason) => close(reason), { outside: dismissOnOverlay }), trapFocus(el, { initialFocus, modal: true }))
   },
   { immediate: true, flush: 'post' },
 )
@@ -129,7 +137,7 @@ const grab = computed(() =>
             <h2 :id="`${id}-title`" data-slot="dialog-title" :class="styles.title"><slot name="title">{{ title }}</slot></h2>
             <p v-if="hasDescription" :id="`${id}-desc`" data-slot="dialog-description" :class="styles.description"><slot name="description">{{ description }}</slot></p>
           </div>
-          <button type="button" data-slot="dialog-close" :class="styles.close" :aria-label="labels.close" data-skip-initial-focus="true" @click="close">
+          <button type="button" data-slot="dialog-close" :class="styles.close" :aria-label="labels.close" data-skip-initial-focus="true" @click="close('close-button')">
             <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
               <path d="M6 6l12 12M18 6L6 18" />
             </svg>

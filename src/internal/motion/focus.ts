@@ -34,13 +34,60 @@ export function returnTarget(): HTMLElement | null {
   return active
 }
 
+// What stays live behind a modal: toasts (marked data-gooee-layer-ignore) and live regions, so news is still
+// read, and the modals' own dim overlays, which can sit beside the panel rather than around it.
+const KEEP_LIVE = '[data-gooee-layer-ignore], [aria-live], [role="alert"], [role="status"], [data-slot$="overlay"]'
+// A live region inside a control (a button's own status) does not keep the control: it goes inert whole,
+// or it would stay reachable with its label taken away.
+const CONTROL = 'button, a[href], input, select, textarea, [role="button"], [role="link"], [tabindex]'
+// How many open modals hold each element inert, so closing an inner modal keeps the outer one's.
+const held = new Map<Element, number>()
+
+/**
+ * Makes everything outside the layer that holds `root` inert: no focus, no clicks, hidden from screen
+ * readers, so a modal is the whole page while it is open. Returns the undo.
+ */
+export function inertOutside(root: HTMLElement) {
+  // The layer is the body child that holds root, so its own overlay stays live.
+  let layer: Element = root
+  while (layer.parentElement && layer.parentElement !== document.body) layer = layer.parentElement
+  const keep = [layer, ...Array.from(document.querySelectorAll(KEEP_LIVE)).filter((k) => k === layer || !k.parentElement?.closest(CONTROL))]
+  const changed: Element[] = []
+  const visit = (parent: Element) => {
+    for (const el of Array.from(parent.children)) {
+      if (/^(SCRIPT|STYLE|TEMPLATE|LINK|META)$/.test(el.tagName) || keep.some((k) => k === el || k.contains(el))) continue
+      if (keep.some((k) => el.contains(k))) visit(el)
+      else {
+        const n = held.get(el) ?? 0
+        // Inert the page set on its own is not ours to undo.
+        if (n === 0 && el.hasAttribute('inert')) continue
+        held.set(el, n + 1)
+        el.setAttribute('inert', '')
+        changed.push(el)
+      }
+    }
+  }
+  visit(document.body)
+  return () => {
+    for (const el of changed) {
+      const n = (held.get(el) ?? 1) - 1
+      if (n > 0) held.set(el, n)
+      else {
+        held.delete(el)
+        el.removeAttribute('inert')
+      }
+    }
+  }
+}
+
 /**
  * Keeps Tab inside `root` until the returned function is called, starting on `initialFocus` or the first
  * focusable (close buttons opt out with data-skip-initial-focus). On release, focus goes back to where it
- * came from, if it is still inside the layer.
+ * came from, if it is still inside the layer. With `modal`, the rest of the page is inert meanwhile.
  */
-export function trapFocus(root: HTMLElement, { initialFocus, restore = true }: { initialFocus?: HTMLElement | null; restore?: boolean } = {}) {
+export function trapFocus(root: HTMLElement, { initialFocus, restore = true, modal = false }: { initialFocus?: HTMLElement | null; restore?: boolean; modal?: boolean } = {}) {
   const previous = returnTarget()
+  const release = modal ? inertOutside(root) : () => {}
   // Close buttons opt out of first focus, so focus lands on the content or the safe action.
   const list = focusables(root)
   const first = initialFocus ?? list.find((el) => !el.hasAttribute('data-skip-initial-focus')) ?? list[0] ?? root
@@ -80,6 +127,8 @@ export function trapFocus(root: HTMLElement, { initialFocus, restore = true }: {
   return () => {
     clearTimeout(check)
     root.removeEventListener('keydown', onKey)
+    // The page comes back first, or focus could not return to it.
+    release()
     // Give focus back only if it is still in the layer, so a click elsewhere keeps its own focus.
     const now = document.activeElement
     const stillInside = !now || now === document.body || root.contains(now)

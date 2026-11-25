@@ -92,7 +92,7 @@ export function Lightbox({ images, index, onIndexChange, getOrigin, labels: labe
 
   const mounted = shown !== null
   useScrollLock(open)
-  useFocusTrap(rootRef, open && mounted)
+  useFocusTrap(rootRef, open && mounted, { modal: true })
   useDismiss(open, [rootRef], () => onIndexChange(null), { outside: false })
 
   useLayoutEffect(() => {

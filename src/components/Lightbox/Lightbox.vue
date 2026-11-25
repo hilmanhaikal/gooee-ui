@@ -84,7 +84,7 @@ watch(
   (now) => {
     if (server) return
     stop()
-    if (now && root.value) release.push(lockScroll(), trapFocus(root.value), dismissable(() => [root.value], close, { outside: false }))
+    if (now && root.value) release.push(lockScroll(), trapFocus(root.value, { modal: true }), dismissable(() => [root.value], close, { outside: false }))
     if (now && !zoomed) {
       zoomed = true
       dir.value = undefined

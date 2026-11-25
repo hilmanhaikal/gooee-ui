@@ -1,0 +1,9 @@
+.space { position: relative; }
+
+.groupLabel {
+  box-sizing: border-box;
+  padding: var(--gooee-space-4) var(--gooee-space-4) var(--gooee-space-2);
+  font-size: var(--gooee-text-xs);
+  font-weight: var(--gooee-weight-medium);
+  color: var(--gooee-color-fg-muted);
+}

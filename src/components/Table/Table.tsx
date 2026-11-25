@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type FocusEvent, type ReactNode } from 'react'
+import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type FocusEvent, type MouseEvent as ReactMouseEvent, type ReactNode } from 'react'
 import { cx } from '../../internal/cx'
 import { flipRows, groupRows, nextSort, readCell as read, revealCell, scrollEdges, sortRows, type TableSort } from '../../internal/motion/table'
 import { useControllable } from '../../internal/useControllable'
@@ -82,6 +82,9 @@ export type TableProps<T> = {
   layout?: 'scroll' | 'stack'
   /** Scrolls the body under a sticky header past this height. */
   maxHeight?: CSSProperties['maxHeight']
+  /** Opens a row, such as its detail page: a click anywhere on the row, or the button the first column's text becomes.
+   * Keep that first column plain text, since it turns into the button. */
+  onRowAction?: (row: T) => void
   /** Shown in place of rows when there are none. */
   emptyText?: ReactNode
   /** Shows skeleton rows in place of the data and holds sorting and selection still. */
@@ -129,6 +132,7 @@ export function Table<T>({
   rowLabel,
   maxHeight,
   layout = 'scroll',
+  onRowAction,
   emptyText = 'Nothing here yet.',
   loading = false,
   loadingRows = 5,
@@ -193,6 +197,13 @@ export function Table<T>({
   const scrollable = Boolean(maxHeight) || more.start || more.end
   const nameOf = (row: T) => (rowLabel ? rowLabel(row) : String(read(row, columns[0]?.key ?? '') ?? getRowId(row)))
 
+  const rowClick = (e: ReactMouseEvent<HTMLTableRowElement>, row: T) => {
+    const target = e.target as HTMLElement
+    // A click on a control, the checkbox cell, or the end of a text selection is not a row action.
+    if (target.closest(`a[href], button, input, select, textarea, label, [contenteditable="true"], .${styles.checkCell}`) || !window.getSelection()?.isCollapsed) return
+    onRowAction!(row)
+  }
+
   const colCount = columns.length + (selectable ? 1 : 0)
   // Keeps the entrance stagger going across groups.
   let rowIndex = 0
@@ -201,18 +212,36 @@ export function Table<T>({
     const rid = getRowId(row)
     const on = selectedSet.has(rid)
     return (
-      <tr key={rid} role="row" data-row-id={rid} className={styles.row} data-slot="table-row" data-selected={on || undefined} style={{ ['--i' as string]: Math.min(ri, 12) }}>
+      <tr
+        key={rid}
+        role="row"
+        data-row-id={rid}
+        className={styles.row}
+        data-slot="table-row"
+        data-selected={on || undefined}
+        style={{ ['--i' as string]: Math.min(ri, 12) }}
+        onClick={onRowAction && ((e) => rowClick(e, row))}
+      >
         {selectable && (
           <td role="cell" className={styles.checkCell} data-slot="table-cell">
             <Check checked={on} label={labels.selectRow(nameOf(row))} onChange={(v) => setSelected(v ? [...selected, rid] : selected.filter((s) => s !== rid))} />
           </td>
         )}
-        {columns.map((c) => (
-          <td key={c.key} role="cell" className={styles.td} data-slot="table-cell" data-align={c.align ?? 'start'} data-label={labelOf(c)}>
-            {/* One wrapper, so the card layout always gets a label and a value */}
-            <span>{c.cell ? c.cell(row) : String(read(row, c.key) ?? '')}</span>
-          </td>
-        ))}
+        {columns.map((c, i) => {
+          const value = c.cell ? c.cell(row) : String(read(row, c.key) ?? '')
+          return (
+            <td key={c.key} role="cell" className={styles.td} data-slot="table-cell" data-align={c.align ?? 'start'} data-label={labelOf(c)}>
+              {/* One wrapper, so the card layout always gets a label and a value */}
+              {onRowAction && i === 0 ? (
+                <button type="button" className={styles.rowAction} data-slot="table-row-action" onClick={() => onRowAction(row)}>
+                  {value}
+                </button>
+              ) : (
+                <span>{value}</span>
+              )}
+            </td>
+          )
+        })}
       </tr>
     )
   }
@@ -221,7 +250,7 @@ export function Table<T>({
     <div className={cx(styles.root, className)} data-slot="table" data-layout={layout} data-more-start={more.start || undefined} data-more-end={more.end || undefined}>
       <div ref={scrollRef} onScroll={measure} onFocus={reveal} className={styles.scroll} data-slot="table-container" style={{ maxHeight }} tabIndex={scrollable ? 0 : undefined} role={scrollable ? 'region' : undefined} aria-labelledby={scrollable ? `${id}-cap` : undefined}>
         {/* Explicit roles keep table semantics when rows restyle as cards (layout="stack") */}
-        <table ref={tableRef} role="table" className={styles.table} data-slot="table-element" aria-labelledby={`${id}-cap`} aria-busy={loading || undefined}>
+        <table ref={tableRef} role="table" className={styles.table} data-slot="table-element" data-row-action={onRowAction ? '' : undefined} aria-labelledby={`${id}-cap`} aria-busy={loading || undefined}>
           <caption id={`${id}-cap`} className={cx(styles.caption, hideCaption && styles.srOnly)} data-slot="table-caption">
             {caption}
           </caption>

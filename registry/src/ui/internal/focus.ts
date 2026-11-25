@@ -8,13 +8,13 @@ export { focusables, returnTarget, trapFocus } from './motion/focus'
 export function useFocusTrap(
   ref: RefObject<HTMLElement | null>,
   active: boolean,
-  options: { initialFocus?: RefObject<HTMLElement | null>; restore?: boolean } = {},
+  options: { initialFocus?: RefObject<HTMLElement | null>; restore?: boolean; modal?: boolean } = {},
 ) {
-  const { initialFocus, restore = true } = options
+  const { initialFocus, restore = true, modal = false } = options
   useEffect(() => {
     if (!active) return
     const root = ref.current
     if (!root) return
-    return trapFocus(root, { initialFocus: initialFocus?.current, restore })
+    return trapFocus(root, { initialFocus: initialFocus?.current, restore, modal })
   }, [active])
 }

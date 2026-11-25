@@ -2,6 +2,44 @@
 
 What changed in Gooee UI for people who use it: components, blocks, templates, themes, tokens and the `npx gooee add` command. Newest first.
 
+## 1.6.0 · November 2026
+
+Deeper parts for real apps: server-fed grids, option lists in the thousands, one menu model, async confirm, close reasons, and right-to-left pages.
+
+### Added
+
+- DataGrid: `loadError` shows in place of the rows when they fail to load, is announced, and `onRetry` (`@retry` in Vue) adds a Try again button.
+- Dialog: `onOpenChange` gets a second argument, the reason it closed: `escape`, `outside`, `close-button` or `drag`. In Vue, listen with `@close`.
+- AlertDialog: `onConfirm` (`@confirm` in Vue) can return a promise. The dialog waits with a spinner on the button, Cancel and Esc wait too, and it closes once the promise succeeds. If it fails, the dialog stays open. `confirmingLabel` names the wait for screen readers.
+- Select: `clearable` adds "None" as the first row, so a choice can be taken back. In React, `onClear` is called; in Vue, `v-model` becomes `null`.
+- DataGrid for server data: `total` sets the row count and what screen readers hear when `rows` holds only some rows. `rowOffset` gives a later page its real row numbers.
+- DataGrid: `onLoadMore` (`@load-more` in Vue) asks for more rows when the user scrolls or keys to the end. `loadingMore` shows a loading row while they come, and `hasMore` says when to stop (by default, once `total` is reached).
+- DataGrid and Table: `onRowAction` (`@row-action` in Vue) opens a row on a click. In DataGrid, Enter on a cell with no controls does the same. In Table, the first column's text becomes a button for keyboard and screen reader users.
+- DataGrid: `empty` (the `#empty` slot in Vue) replaces the "No rows" message, such as with a button to add the first row.
+- Select, Combobox and MultiSelect handle long lists: past 100 options, only the options in view are drawn, so a list of thousands opens and scrolls fast. Keys, type-ahead and screen readers still reach every option.
+- Select, Combobox and MultiSelect: an option's `group` puts it under a named group. Options of a group show together, and a screen reader says the group's name.
+- Select, Combobox and MultiSelect: `renderOption` (the `#option` slot in Vue) draws an option's content, such as an icon or an avatar before the label.
+- MultiSelect can load its options from a server, as Combobox does: `inputValue` and `onInputChange` (`v-model:input-value` in Vue), `filter={false}`, `loading`, `loadError` and `onRetry` (`@retry`).
+- DropdownMenu and ContextMenu take the same entries as Menubar: `checkbox` items, `radio` groups and submenus (`items` on an item; ContextMenu had them already). Clicking a checkable item closes the menu; Space keeps it open, so several can be set in a row.
+- DropdownMenu and ContextMenu: `href` makes an item a real link, so Cmd-click and a middle click open it in a new tab.
+- Calendar, DatePicker, DateRangePicker, CalendarHeatmap and WeekSchedule: `weekStartsOn` takes any day from 0 (Sunday) to 6 (Saturday), or `'locale'` for the locale's own first day, such as Saturday in many Arabic locales. Monday stays the default.
+- DataGrid: `locale` sets the sort order and the filter value lists, such as `'sv'`, where Ö comes after Z. `'en-MY'` stays the default.
+- Toasts: F6 moves focus to the toasts and F6 again goes back.
+
+### Fixed
+
+- Toast: a toast with an action no longer closes by itself after 5 seconds, so no one loses the chance to press Undo (WCAG 2.2.1). Pass `duration` to close it anyway.
+- MultiSelect: a chip keeps the label it was picked with after `options` changes, such as a server search that no longer returns it. It used to show the raw value.
+- DropdownMenu: items under a label are a group named by that label, so a screen reader says the group before its first item. A disabled item's reason is read with it.
+- ContextMenu and Menubar: a label names the items under it as a group too, as in DropdownMenu.
+- Menus on a right-to-left page: Left opens a submenu and Right closes it, the Menubar's arrows follow the reading order, and a submenu opens to the left with its arrow pointing there.
+- DropdownMenu and ContextMenu: once a menu has a checkable item, every label lines up in the same column, as in Menubar.
+- ContextMenu: a submenu opened by key or click no longer closes by itself when a hover from just before is still waiting to act.
+- Dialog, AlertDialog, Sheet, Drawer, CommandPalette and Lightbox make the page behind them inert while open, so a screen reader cannot wander behind a modal. Toasts and live announcements stay reachable.
+- Toasts: when the toast that holds focus leaves, focus moves to the next toast or back where it came from, instead of being lost.
+- Right-to-left pages: arrow keys follow the reading order in Tabs, Calendar and DataGrid. DataGrid and Table mirror, with the pinned or first column at the right, and a DataGrid column edge drags the right way. The Calendar's month arrows point the right way.
+- Combobox and MultiSelect: the search ignores accents, so "cafe" finds "Café", and the underline marks the right letters.
+
 ## 1.5.1 · November 2026
 
 KanbanBoard scrolls when a card is held at its edge, and a small Dialog stacks its buttons.

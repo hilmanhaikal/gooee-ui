@@ -1,7 +1,7 @@
 // Gooee UI, MIT licence. https://gooee.dev
 'use client'
 
-import { useId, useRef, type ReactNode } from 'react'
+import { useId, useRef, useState, type ReactNode } from 'react'
 import { cx } from '../../internal/cx'
 import { useFocusTrap } from '../../internal/focus'
 import { useDismiss, useScrollLock } from '../../internal/layers'
@@ -27,11 +27,14 @@ export type AlertDialogProps = {
   confirmLabel: string
   /** Text of the cancel button. */
   cancelLabel?: string
-  /** Called when they confirm, before the dialog closes. */
-  onConfirm: () => void
+  /** Called when they confirm, before the dialog closes. Return a promise, such as a delete request, and the dialog waits: the button shows a spinner, Cancel and Esc wait too, and it closes once the promise succeeds. If it fails, the dialog stays open, so you can say what went wrong. */
+  onConfirm: () => void | Promise<unknown>
+  /** Spoken on the confirm button while a promise from onConfirm is running, such as "Deleting". */
+  confirmingLabel?: string
   /** Called when they cancel with the button or Esc, before the dialog closes. */
   onCancel?: () => void
-  /** "danger" gives the confirm button the solid red look, for actions that destroy something. */
+  /** The confirm button's colour says what it does. "neutral" (the default) is the accent blue of the main action,
+   * for a safe step such as "Send now". "danger" is solid red, only for actions that destroy something, such as "Delete". */
   tone?: 'neutral' | 'danger'
   /** Extra class for the dialog panel. */
   className?: string
@@ -46,10 +49,12 @@ export function AlertDialog({
   confirmLabel,
   cancelLabel = 'Cancel',
   onConfirm,
+  confirmingLabel,
   onCancel,
   tone = 'neutral',
   className,
 }: AlertDialogProps) {
+  const [pending, setPending] = useState(false)
   const id = useId()
   const panelRef = useRef<HTMLDivElement>(null)
   const cancelRef = useRef<HTMLButtonElement>(null)
@@ -57,14 +62,28 @@ export function AlertDialog({
   useDialogMorph(panelRef, open, mounted, state)
 
   const cancel = () => {
+    if (pending) return
     onCancel?.()
     onOpenChange(false)
+  }
+  const confirm = () => {
+    if (pending) return
+    const result = onConfirm()
+    if (!(result instanceof Promise)) return onOpenChange(false)
+    setPending(true)
+    result.then(
+      () => {
+        setPending(false)
+        onOpenChange(false)
+      },
+      () => setPending(false),
+    )
   }
 
   useScrollLock(open)
   useDismiss(open, [panelRef], cancel, { outside: false })
   // Focus starts on the least destructive choice, so a stray Enter never confirms.
-  useFocusTrap(panelRef, open && mounted, { initialFocus: cancelRef })
+  useFocusTrap(panelRef, open && mounted, { initialFocus: cancelRef, modal: true })
 
   if (!mounted) return null
   return (
@@ -90,16 +109,10 @@ export function AlertDialog({
           </header>
           {children && <div data-slot="alert-dialog-body" className={dialog.body}>{children}</div>}
           <footer data-slot="alert-dialog-footer" className={dialog.footer}>
-            <Button ref={cancelRef} variant="secondary" onClick={cancel}>
+            <Button ref={cancelRef} variant="secondary" onClick={cancel} disabled={pending}>
               {cancelLabel}
             </Button>
-            <Button
-              variant={tone === 'danger' ? 'danger' : 'primary'}
-              onClick={() => {
-                onConfirm()
-                onOpenChange(false)
-              }}
-            >
+            <Button variant={tone === 'danger' ? 'danger' : 'primary'} onClick={confirm} loading={pending} loadingLabel={confirmingLabel}>
               {confirmLabel}
             </Button>
           </footer>

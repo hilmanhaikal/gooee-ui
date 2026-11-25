@@ -1554,6 +1554,16 @@
           "target": "~/src/ui/components/DropdownMenu/index.ts"
         },
         {
+          "path": "registry/src/ui/icons/icons.module.css",
+          "type": "registry:file",
+          "target": "~/src/ui/icons/icons.module.css"
+        },
+        {
+          "path": "registry/src/ui/icons/icons.tsx",
+          "type": "registry:file",
+          "target": "~/src/ui/icons/icons.tsx"
+        },
+        {
           "path": "registry/src/ui/internal/Portal.tsx",
           "type": "registry:file",
           "target": "~/src/ui/internal/Portal.tsx"
@@ -1599,6 +1609,11 @@
           "target": "~/src/ui/internal/motion.ts"
         },
         {
+          "path": "registry/src/ui/internal/motion/contextMenu.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/motion/contextMenu.ts"
+        },
+        {
           "path": "registry/src/ui/internal/motion/floating.ts",
           "type": "registry:file",
           "target": "~/src/ui/internal/motion/floating.ts"
@@ -1632,6 +1647,16 @@
           "path": "registry/src/ui/internal/motion/menuKeys.ts",
           "type": "registry:file",
           "target": "~/src/ui/internal/motion/menuKeys.ts"
+        },
+        {
+          "path": "registry/src/ui/internal/motion/menuModel.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/motion/menuModel.ts"
+        },
+        {
+          "path": "registry/src/ui/internal/motion/menubar.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/motion/menubar.ts"
         },
         {
           "path": "registry/src/ui/internal/useFloating.ts",
@@ -4257,6 +4282,16 @@
           "target": "~/src/ui/internal/FieldMessage.tsx"
         },
         {
+          "path": "registry/src/ui/internal/OptionList.module.css",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/OptionList.module.css"
+        },
+        {
+          "path": "registry/src/ui/internal/OptionList.tsx",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/OptionList.tsx"
+        },
+        {
           "path": "registry/src/ui/internal/Portal.tsx",
           "type": "registry:file",
           "target": "~/src/ui/internal/Portal.tsx"
@@ -4345,6 +4380,16 @@
           "path": "registry/src/ui/internal/motion/listbox.ts",
           "type": "registry:file",
           "target": "~/src/ui/internal/motion/listbox.ts"
+        },
+        {
+          "path": "registry/src/ui/internal/motion/optionList.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/motion/optionList.ts"
+        },
+        {
+          "path": "registry/src/ui/internal/motion/virtualList.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/motion/virtualList.ts"
         },
         {
           "path": "registry/src/ui/internal/useControllable.ts",
@@ -5094,6 +5139,11 @@
           "target": "~/src/ui/internal/motion.ts"
         },
         {
+          "path": "registry/src/ui/internal/motion/menuKeys.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/motion/menuKeys.ts"
+        },
+        {
           "path": "registry/src/ui/internal/motion/tabs.ts",
           "type": "registry:file",
           "target": "~/src/ui/internal/motion/tabs.ts"
@@ -5413,6 +5463,11 @@
           "target": "~/src/ui/internal/feel.ts"
         },
         {
+          "path": "registry/src/ui/internal/keyboard.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/keyboard.ts"
+        },
+        {
           "path": "registry/src/ui/internal/liquidPath.ts",
           "type": "registry:file",
           "target": "~/src/ui/internal/liquidPath.ts"
@@ -5426,6 +5481,11 @@
           "path": "registry/src/ui/internal/motion/fling.ts",
           "type": "registry:file",
           "target": "~/src/ui/internal/motion/fling.ts"
+        },
+        {
+          "path": "registry/src/ui/internal/motion/focus.ts",
+          "type": "registry:file",
+          "target": "~/src/ui/internal/motion/focus.ts"
         },
         {
           "path": "registry/src/ui/internal/motion/liquidMatter.ts",

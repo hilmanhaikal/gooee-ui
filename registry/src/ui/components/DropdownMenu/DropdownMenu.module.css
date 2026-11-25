@@ -5,8 +5,6 @@
   z-index: var(--gooee-z-popover);
   min-width: var(--gooee-menu-w);
   max-width: calc(100vw - var(--gooee-space-5) * 2);
-  max-height: calc(100dvh - 2 * var(--gooee-space-5));
-  overflow-y: auto;
   padding: calc(var(--gooee-space-2) - var(--gooee-line));
   border: var(--gooee-line) solid var(--gooee-glass-edge, var(--gooee-color-border));
   border-radius: var(--gooee-radius-md);
@@ -21,6 +19,16 @@
 }
 
 .menu[data-side="top"] { --oy: var(--gooee-shift-sm); transform-origin: bottom left; }
+
+/* A scrolling menu would clip its submenus, so only menus without one scroll. */
+.menu:not(:has([aria-haspopup="menu"])) {
+  max-height: calc(100dvh - 2 * var(--gooee-space-5));
+  overflow-y: auto;
+}
+
+.menu[data-sub] { animation-name: subIn; }
+
+.itemWrap { position: relative; }
 
 .menu[data-state="closed"] {
   animation: menuOut var(--gooee-motion-fast) var(--gooee-ease-morph) forwards;
@@ -52,6 +60,8 @@
 
 .item[data-destructive]:not([aria-disabled]) { --gooee-bead: var(--gooee-color-danger-soft); }
 
+a.item { color: inherit; text-decoration: none; }
+
 /* The bead (internal/liquidMore.ts): while the highlight moves between items, the panel carries
    data-bead and an SVG draws it under the items; at rest the focused item's own fill is back. */
 .bead {
@@ -67,7 +77,8 @@
 .menu[data-bead] .item:focus,
 .menu[data-bead] .item[data-destructive]:not([aria-disabled]):is(:focus, :active) { background: transparent; }
 
-.item:focus { background: var(--gooee-color-surface-hover); }
+.item:focus,
+.item[data-state="open"] { background: var(--gooee-color-surface-hover); }
 .item:focus-visible { box-shadow: inset 0 0 0 var(--gooee-focus-width) var(--gooee-color-fg); }
 
 .item:active:not([aria-disabled]) {
@@ -110,6 +121,36 @@
   color: var(--gooee-color-fg-muted);
 }
 
+.check {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: var(--gooee-icon-md);
+  height: var(--gooee-icon-md);
+  margin-inline-end: calc(var(--gooee-space-2) * -1);
+  font-size: var(--gooee-icon-md);
+}
+
+.check > * { animation: tick var(--gooee-motion-slow) var(--gooee-ease-morph); }
+
+.dot {
+  width: var(--gooee-dot);
+  height: var(--gooee-dot);
+  border-radius: var(--gooee-radius-full);
+  background: currentColor;
+}
+
+.chevron {
+  width: var(--gooee-icon-sm);
+  height: var(--gooee-icon-sm);
+  color: var(--gooee-color-fg-muted);
+  transition: transform var(--gooee-motion-base) var(--gooee-ease-morph);
+}
+
+.item[data-state="open"] .chevron { transform: translateX(var(--gooee-space-1)); }
+/* On a right-to-left page a submenu opens to the left, so its arrow points there. */
+.chevron:dir(rtl) { scale: -1 1; }
+
 .separator {
   height: var(--gooee-line);
   margin: var(--gooee-space-2) var(--gooee-space-3);
@@ -133,5 +174,13 @@
 
 @keyframes itemIn {
   from { opacity: 0; transform: translateX(calc(var(--gooee-shift-sm) * -1)); }
+}
+
+@keyframes subIn {
+  from { opacity: 0; transform: translateX(calc(var(--gooee-shift-sm) * -1)) scale(var(--gooee-pop-scale)); }
+}
+
+@keyframes tick {
+  from { opacity: 0; transform: scale(var(--gooee-check-scale)); }
 }
 }

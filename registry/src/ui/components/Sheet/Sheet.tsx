@@ -84,7 +84,7 @@ function PlainSheet({ open, onOpenChange, title, description, children, footer, 
 
   useScrollLock(open)
   useDismiss(open, [panelRef], () => onOpenChange(false))
-  useFocusTrap(panelRef, open && mounted, { initialFocus })
+  useFocusTrap(panelRef, open && mounted, { initialFocus, modal: true })
 
   if (!mounted) return null
   return (
@@ -212,7 +212,7 @@ function DetentSheet({ open, onOpenChange, title, description, children, footer,
     trapStart.current = active && panelRef.current?.contains(active) ? active : (initialFocus?.current ?? null)
   }, [atTop, open])
   useScrollLock(open && atTop)
-  useFocusTrap(panelRef, open && mounted && atTop, { initialFocus: trapStart, restore: false })
+  useFocusTrap(panelRef, open && mounted && atTop, { initialFocus: trapStart, restore: false, modal: true })
   useDismiss(open, [panelRef], sheet.stepDown, { outside: atTop })
 
   useEffect(() => {

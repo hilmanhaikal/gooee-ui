@@ -1,6 +1,7 @@
 // Gooee UI, MIT licence. https://gooee.dev
 import { bezier } from '../feel'
 import { morphCurve, motionMs, prefersReducedMotion } from '../motion'
+import { logicalKey } from './menuKeys'
 
 // The parts of Tabs that are the same in every framework: where the chosen tab is, the tab stop, the
 // arrow keys and the rise that stretches over to a new choice.
@@ -27,8 +28,10 @@ export function tabKey(list: HTMLElement | null, e: { key: string; preventDefaul
   const i = tabs.indexOf(document.activeElement as HTMLButtonElement)
   if (i < 0) return
   let next = -1
-  if (e.key === 'ArrowRight') next = (i + 1) % tabs.length
-  else if (e.key === 'ArrowLeft') next = (i - 1 + tabs.length) % tabs.length
+  // Right goes on to the next tab, or Left on a right-to-left page.
+  const key = logicalKey(e.key, list)
+  if (key === 'ArrowRight') next = (i + 1) % tabs.length
+  else if (key === 'ArrowLeft') next = (i - 1 + tabs.length) % tabs.length
   else if (e.key === 'Home') next = 0
   else if (e.key === 'End') next = tabs.length - 1
   if (next < 0) return

@@ -3,7 +3,7 @@
 import { createContext, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { CheckCircleIcon, ErrorIcon, InfoIcon, XIcon } from '../../icons/icons'
 import { motionMs } from '../../internal/motion'
-import { createToastBud, createToastSwipe, toastId, toastLayout, toastSay, toastStack, toastTimer, watchToastHeight, type ToastLeaving, type ToastOrigin, type ToastTone } from '../../internal/motion/toast'
+import { createToastBud, createToastSwipe, toastFocus, toastId, toastLayout, toastSay, toastStack, toastTimer, watchToastHeight, type ToastLeaving, type ToastOrigin, type ToastTone } from '../../internal/motion/toast'
 import { Spinner } from '../Spinner'
 import styles from './Toast.module.css'
 
@@ -16,8 +16,9 @@ export type ToastOptions = {
   tone?: ToastTone
   /** Shows a spinner and keeps the toast until you update it with loading: false. */
   loading?: boolean
-  /** Milliseconds before it leaves. Infinity keeps it until dismissed. */
+  /** Milliseconds before it leaves. Infinity keeps it until dismissed. 5000 by default, or Infinity when it has an action. */
   duration?: number
+  /** A button in the toast. A toast with one stays until it is used or dismissed, so no one loses the chance to press it (WCAG 2.2.1). */
   action?: { label: string; onClick: () => void }
   /** Where the action happened: the element pressed, or a point on screen. Within 240px of the toast, the drop buds out of it and a dismiss flows back into it. Further away, or without it, the drop buds out of the window's edge. */
   origin?: ToastOrigin
@@ -67,11 +68,15 @@ export function ToastProvider({ children, max = 3, label = 'Notifications', labe
   const itemsRef = useRef(items)
   itemsRef.current = items
   const timers = useRef(new Set<number>())
+  const viewportRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
     const pending = timers.current
     return () => pending.forEach((t) => window.clearTimeout(t))
   }, [])
+
+  // F6 reaches the toasts, and focus is not lost when the toast holding it leaves (motion/toast.ts).
+  useEffect(() => toastFocus(() => viewportRef.current), [])
 
   const say = (opts: Partial<ToastOptions>, tone?: ToastTone) => {
     const fresh = (prev: string) => toastSay(prev, opts)
@@ -93,7 +98,7 @@ export function ToastProvider({ children, max = 3, label = 'Notifications', labe
     () => ({
       toast: (opts) => {
         const id = toastId()
-        setItems((list) => [...list, { duration: 5000, tone: 'neutral', ...opts, id, leaving: false }])
+        setItems((list) => [...list, { duration: opts.action ? Infinity : 5000, tone: 'neutral', ...opts, id, leaving: false }])
         say(opts, opts.tone)
         return id
       },
@@ -114,6 +119,7 @@ export function ToastProvider({ children, max = 3, label = 'Notifications', labe
       <div className={styles.srOnly} role="status" aria-live="polite" aria-atomic="true">{announce}</div>
       <div className={styles.srOnly} role="alert" aria-atomic="true">{urgent}</div>
       <section
+        ref={viewportRef}
         className={styles.viewport}
         data-slot="toast-viewport"
         // Toasts are not part of an open dialog, but tapping one should not close it.

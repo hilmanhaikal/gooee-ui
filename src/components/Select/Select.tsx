@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useId, useLayoutEffect, useRef, useState, type ChangeEventHandler, type FocusEventHandler, type KeyboardEvent, type ReactNode, type Ref } from 'react'
+import { useId, useMemo, useRef, useState, type ChangeEventHandler, type FocusEventHandler, type KeyboardEvent, type ReactNode, type Ref } from 'react'
 import { cx } from '../../internal/cx'
 import { CheckIcon, ChevronDownIcon } from '../../icons/icons'
 import { useDismiss } from '../../internal/layers'
@@ -11,34 +11,54 @@ import { useControllable } from '../../internal/useControllable'
 import { useFloating } from '../../internal/useFloating'
 import { usePresence } from '../../internal/usePresence'
 import { createListbox } from '../../internal/motion/listbox'
+import { byGroup } from '../../internal/motion/optionList'
+import { OptionList } from '../../internal/OptionList'
 import { FieldMessage } from '../../internal/FieldMessage'
 import { leavesField } from '../../internal/formCore'
 import { mergeRefs } from '../../internal/mergeRefs'
 import { changeEvent, retarget, setNativeValue, useField, useMirror } from '../../internal/useField'
 import styles from './Select.module.css'
 
-export type SelectOption = { value: string; label: string; disabled?: boolean; hint?: string }
+export type SelectOption = {
+  value: string
+  label: string
+  disabled?: boolean
+  hint?: string
+  /** Name of the group the option sits under. Options of a group are shown together. */
+  group?: string
+}
+
+/** What renderOption gets besides the option. */
+export type SelectOptionState = { selected: boolean; active: boolean }
 
 export type SelectLabels = {
   /** Shown in the open list when there are no options. */
   empty: string
+  /** The first row of a clearable list, which chooses nothing. */
+  none: string
 }
 
-const defaultLabels: SelectLabels = { empty: 'No options' }
+const defaultLabels: SelectLabels = { empty: 'No options', none: 'None' }
 
 export type SelectProps = {
   /** Visible name of the field, also read by screen readers. */
   label: string
   /** Keeps the label for screen readers only, for a list where a column heading already names the field. */
   hideLabel?: boolean
-  /** Choices in the list, in order. */
+  /** Choices in the list, in order. A long list draws only the options in view. */
   options: SelectOption[]
+  /** Draws an option's content in the list, such as an icon before the label. The check mark stays. Defaults to the label and hint. */
+  renderOption?: (option: SelectOption, state: SelectOptionState) => ReactNode
   /** Selected value, when you control it. Null means nothing is chosen. */
   value?: string | null
   /** Starting value when you do not control it. */
   defaultValue?: string | null
   /** Called when the selected value changes, with the new value. */
   onValueChange?: (value: string) => void
+  /** Adds "None" as the first row, so a choice can be taken back. Not shown when required. */
+  clearable?: boolean
+  /** Called when "None" is chosen in a clearable Select. When you control the value, set it to null here. */
+  onClear?: () => void
   /** Shown when nothing is chosen yet. */
   placeholder?: string
   /** Hint under the field. Hidden while an error shows. */
@@ -71,9 +91,12 @@ export function Select({
   label,
   hideLabel = false,
   options,
+  renderOption,
   value: valueProp,
   defaultValue = null,
   onValueChange,
+  clearable = false,
+  onClear,
   placeholder = 'Choose one',
   help,
   error,
@@ -97,7 +120,11 @@ export function Select({
   const errorId = `${baseId}-error`
   const emptyId = `${baseId}-empty`
   const triggerId = id ?? `${auto}-trigger`
-  const [value, setValue] = useControllable<string | null>(valueProp, defaultValue, (v) => v !== null && onValueChange?.(v))
+  // A clearable list starts with "None", whose value '' stands for null, as an empty native select does.
+  const withNone = clearable && !required
+  const [value, setValue] = useControllable<string | null>(valueProp, defaultValue, (v) => (v === null ? withNone && onClear?.() : onValueChange?.(v)))
+  const grouped = useMemo(() => byGroup(options), [options])
+  const rows: SelectOption[] = useMemo(() => (withNone ? [{ value: '', label: labels.none }, ...grouped] : grouped), [withNone, labels.none, grouped])
   const [open, setOpen] = useState(false)
   const [active, setActive] = useState(-1)
   const rootRef = useRef<HTMLDivElement>(null)
@@ -109,21 +136,19 @@ export function Select({
   const field = useField({ input, name, error, onSync: () => input.current && input.current.value !== (value ?? '') && setValue(input.current.value || null) })
   const shownError = field.error
   const listRef = useRef<HTMLDivElement>(null)
-  const optionRefs = useRef<Array<HTMLDivElement | null>>([])
   const { mounted, state } = usePresence(open, 'morph-out')
   const { style, side, ready } = useFloating(triggerRef, listRef, { open: mounted, side: 'bottom', align: 'start', offset: 6, matchWidth: true })
   // The list grows out of the field and folds back into it.
   useLiquid(listRef, triggerRef, state, mounted && ready)
   // Open or keyboard focused, the field's dark edge (its focus indicator) flows round it from where it was pressed, or from its start edge for a key.
   useEdgeFlow(triggerRef, triggerRef, ':is([data-state="open"], :focus-visible)', styles.edge)
-  const [hl, setHl] = useState<{ top: number; height: number } | null>(null)
 
-  const selectedIndex = options.findIndex((o) => o.value === value)
-  const selected = selectedIndex >= 0 ? options[selectedIndex] : null
+  const selectedIndex = rows.findIndex((o) => o.value === (value ?? (withNone ? '' : null)))
+  const selected = value === null ? null : (options.find((o) => o.value === value) ?? null)
 
   // Arrows, Home, End, Enter, Space, Tab and type-ahead (motion/listbox.ts).
-  const optionsRef = useRef(options)
-  optionsRef.current = options
+  const optionsRef = useRef(rows)
+  optionsRef.current = rows
   const list = useRef<ReturnType<typeof createListbox>>(null)
   list.current ??= createListbox(() => optionsRef.current)
   const { enabled, first } = list.current
@@ -139,30 +164,19 @@ export function Select({
   }
   // A person's choice: the hidden input fires a real change event, then the caller's onChange gets it.
   const commit = (next: string) => {
-    if (next === value) return
+    if (next === (value ?? '')) return
     const native = input.current && setNativeValue(input.current, next)
-    setValue(next)
+    setValue(next || null)
     field.changed()
     if (native) onChange?.(changeEvent(native, input.current!))
   }
   const choose = (i: number) => {
     if (!enabled(i)) return
-    commit(options[i].value)
+    commit(rows[i].value)
     close()
   }
 
   useDismiss(open, [triggerRef, listRef], (reason) => close(reason === 'escape'))
-
-  useLayoutEffect(() => {
-    const el = optionRefs.current[active]
-    if (!open || !el) return
-    setHl({ top: el.offsetTop, height: el.offsetHeight })
-    el.scrollIntoView({ block: 'nearest' })
-  }, [active, open, mounted])
-
-  useEffect(() => {
-    if (!open) setHl(null)
-  }, [open])
 
   const onKeyDown = (e: KeyboardEvent<HTMLButtonElement>) => {
     const r = list.current!.key(e, open, active, selectedIndex)
@@ -172,7 +186,7 @@ export function Select({
     else if (r.active !== undefined) setActive(r.active)
     if (r.choose) choose(active)
     if (r.tab) {
-      if (enabled(active)) commit(options[active].value)
+      if (enabled(active)) commit(rows[active].value)
       setOpen(false)
     }
   }
@@ -248,33 +262,37 @@ export function Select({
             style={style}
             onMouseDown={(e) => e.preventDefault()}
           >
-            {hl && <span className={styles.highlight} data-slot="select-highlight" style={{ transform: `translateY(${hl.top}px)`, height: hl.height }} aria-hidden="true" />}
-            {options.map((o, i) => (
-              <div
-                key={o.value}
-                ref={(el) => {
-                  optionRefs.current[i] = el
-                }}
-                id={`${baseId}-opt-${i}`}
-                role="option"
-                aria-selected={o.value === value}
-                aria-disabled={o.disabled || undefined}
-                className={styles.option}
-                data-slot="select-option"
-                data-highlighted={i === active || undefined}
-                data-selected={o.value === value || undefined}
-                data-disabled={o.disabled || undefined}
-                style={{ ['--i' as string]: Math.min(i, 12) }}
-                onPointerMove={() => enabled(i) && active !== i && setActive(i)}
-                onClick={() => choose(i)}
-              >
-                <span className={styles.optionText} data-slot="select-option-text">
-                  {o.label}
-                  {o.hint && <span className={styles.hint} data-slot="select-option-hint">{o.hint}</span>}
-                </span>
-                <CheckIcon className={styles.check} data-slot="select-option-indicator" />
-              </div>
-            ))}
+            <OptionList options={rows} active={open ? active : -1} list={listRef} highlightClass={styles.highlight} part="select" baseId={baseId}>
+              {(o, i, { style: at, ...place }) => (
+                <div
+                  {...place}
+                  id={`${baseId}-opt-${i}`}
+                  role="option"
+                  aria-selected={i === selectedIndex}
+                  aria-disabled={o.disabled || undefined}
+                  className={styles.option}
+                  data-slot="select-option"
+                  data-highlighted={i === active || undefined}
+                  data-selected={i === selectedIndex || undefined}
+                  data-disabled={o.disabled || undefined}
+                  style={{ ['--i' as string]: Math.min(i, 12), ...at }}
+                  onPointerMove={() => enabled(i) && active !== i && setActive(i)}
+                  onClick={() => choose(i)}
+                >
+                  <span className={styles.optionText} data-slot="select-option-text">
+                    {renderOption && !(withNone && i === 0) ? (
+                      renderOption(o, { selected: i === selectedIndex, active: i === active })
+                    ) : (
+                      <>
+                        {o.label}
+                        {o.hint && <span className={styles.hint} data-slot="select-option-hint">{o.hint}</span>}
+                      </>
+                    )}
+                  </span>
+                  <CheckIcon className={styles.check} data-slot="select-option-indicator" />
+                </div>
+              )}
+            </OptionList>
             {empty && (
               <div id={emptyId} className={styles.empty} data-slot="select-empty">
                 {labels.empty}

@@ -49,6 +49,7 @@ const {
   rowLabel,
   layout = 'scroll',
   maxHeight,
+  onRowAction,
   emptyText = 'Nothing here yet.',
   loading = false,
   loadingRows = 5,
@@ -80,6 +81,9 @@ const {
   layout?: 'scroll' | 'stack'
   /** Scrolls the body under a sticky header past this height. A number is pixels. */
   maxHeight?: number | string
+  /** Opens a row, such as its detail page: a click anywhere on the row, or the button the first column's text becomes.
+   * Listen with @row-action. Keep that first column plain text, since it turns into the button. */
+  onRowAction?: (row: T) => void
   /** Shown in place of rows when there are none. The empty slot replaces it. */
   emptyText?: string
   /** Shows skeleton rows in place of the data and holds sorting and selection still. */
@@ -170,6 +174,12 @@ const rowGroups = computed(() => {
   const list = groups.value && groups.value.length > 0 ? groups.value : [{ key: '', rows: sorted.value }]
   return list.map((g) => ({ key: g.key, rows: g.rows.map((row) => ({ row, rid: getRowId(row), i: Math.min(i++, 12) })) }))
 })
+const rowClick = (e: MouseEvent, row: T) => {
+  const target = e.target as HTMLElement
+  // A click on a control, the checkbox cell, or the end of a text selection is not a row action.
+  if (!onRowAction || target.closest(`a[href], button, input, select, textarea, label, [contenteditable="true"], .${styles.checkCell}`) || !window.getSelection()?.isCollapsed) return
+  onRowAction(row)
+}
 // Draws what a header or cell function returns.
 const Out: FunctionalComponent<{ v: VNodeChild }> = (p) => p.v
 </script>
@@ -188,7 +198,7 @@ const Out: FunctionalComponent<{ v: VNodeChild }> = (p) => p.v
       @focusin="reveal"
     >
       <!-- Explicit roles keep table semantics when rows restyle as cards (layout="stack") -->
-      <table ref="tableEl" role="table" :class="styles.table" data-slot="table-element" :aria-labelledby="`${id}-cap`" :aria-busy="loading || undefined">
+      <table ref="tableEl" role="table" :class="styles.table" data-slot="table-element" :data-row-action="onRowAction ? '' : undefined" :aria-labelledby="`${id}-cap`" :aria-busy="loading || undefined">
         <caption :id="`${id}-cap`" :class="[styles.caption, hideCaption && styles.srOnly]" data-slot="table-caption">{{ caption }}</caption>
         <thead role="rowgroup" :class="styles.head" data-slot="table-header">
           <tr role="row">
@@ -254,7 +264,7 @@ const Out: FunctionalComponent<{ v: VNodeChild }> = (p) => p.v
                 <span>{{ g.key }}</span>{{ ' ' }}<span :class="styles.groupCount" data-slot="table-group-count">{{ labels.groupCount(g.rows.length) }}</span>
               </th>
             </tr>
-            <tr v-for="{ row, rid, i } in g.rows" :key="rid" role="row" :data-row-id="rid" :class="styles.row" data-slot="table-row" :data-selected="selectedSet.has(rid) || undefined" :style="{ '--i': i }">
+            <tr v-for="{ row, rid, i } in g.rows" :key="rid" role="row" :data-row-id="rid" :class="styles.row" data-slot="table-row" :data-selected="selectedSet.has(rid) || undefined" :style="{ '--i': i }" @click="rowClick($event, row)">
               <td v-if="selectable" role="cell" :class="styles.checkCell" data-slot="table-cell">
                 <span :class="styles.check" data-slot="table-checkbox">
                   <input
@@ -270,9 +280,12 @@ const Out: FunctionalComponent<{ v: VNodeChild }> = (p) => p.v
                   </span>
                 </span>
               </td>
-              <td v-for="c in columns" :key="c.key" role="cell" :class="styles.td" data-slot="table-cell" :data-align="c.align ?? 'start'" :data-label="labelOf(c)">
+              <td v-for="(c, ci) in columns" :key="c.key" role="cell" :class="styles.td" data-slot="table-cell" :data-align="c.align ?? 'start'" :data-label="labelOf(c)">
                 <!-- One wrapper, so the card layout always gets a label and a value -->
-                <span><Out :v="c.cell ? c.cell(row) : String(read(row, c.key) ?? '')" /></span>
+                <button v-if="onRowAction && ci === 0" type="button" :class="styles.rowAction" data-slot="table-row-action" @click="onRowAction(row)">
+                  <Out :v="c.cell ? c.cell(row) : String(read(row, c.key) ?? '')" />
+                </button>
+                <span v-else><Out :v="c.cell ? c.cell(row) : String(read(row, c.key) ?? '')" /></span>
               </td>
             </tr>
             <tr v-if="!groups?.length && sorted.length === 0" role="row">

@@ -16,8 +16,9 @@ export type ToastOptions = {
   tone?: ToastTone
   /** Shows a spinner and keeps the toast until you update it with loading: false. */
   loading?: boolean
-  /** Milliseconds before it leaves. Infinity keeps it until dismissed. */
+  /** Milliseconds before it leaves. Infinity keeps it until dismissed. 5000 by default, or Infinity when it has an action. */
   duration?: number
+  /** A button in the toast. A toast with one stays until it is used or dismissed, so no one loses the chance to press it (WCAG 2.2.1). */
   action?: { label: string; onClick: () => void }
   /** Where the action happened: the element pressed, or a point on screen. Within 240px of the toast, the drop buds out of it and a dismiss flows back into it. Further away, or without it, the drop buds out of the window's edge. */
   origin?: ToastOrigin
@@ -43,9 +44,9 @@ export function useToast(): ToastApi {
 </script>
 
 <script setup lang="ts">
-import { computed, onBeforeUnmount, provide, ref, shallowRef } from 'vue'
+import { computed, onBeforeUnmount, onMounted, provide, ref, shallowRef } from 'vue'
 import { motionMs } from '../../internal/motion'
-import { toastId, toastLayout, toastSay } from '../../internal/motion/toast'
+import { toastFocus, toastId, toastLayout, toastSay } from '../../internal/motion/toast'
 import ToastItem from './ToastItem.vue'
 import styles from './Toast.module.css'
 
@@ -72,7 +73,14 @@ const expanded = ref(false)
 const announce = ref('')
 const urgent = ref('')
 const timers = new Set<number>()
-onBeforeUnmount(() => timers.forEach((t) => window.clearTimeout(t)))
+// F6 reaches the toasts, and focus is not lost when the toast holding it leaves (motion/toast.ts).
+const viewport = ref<HTMLElement | null>(null)
+let stopFocus = () => {}
+onMounted(() => (stopFocus = toastFocus(() => viewport.value)))
+onBeforeUnmount(() => {
+  timers.forEach((t) => window.clearTimeout(t))
+  stopFocus()
+})
 
 const say = (opts: Partial<ToastOptions>, tone?: ToastTone) => {
   if (tone === 'danger') urgent.value = toastSay(urgent.value, opts)
@@ -93,7 +101,7 @@ const remove = (id: number, dir: ToastLeaving = 'down') => {
 provide(toastKey, {
   toast: (opts) => {
     const id = toastId()
-    items.value = [...items.value, { duration: 5000, tone: 'neutral', ...opts, id, leaving: false }]
+    items.value = [...items.value, { duration: opts.action ? Infinity : 5000, tone: 'neutral', ...opts, id, leaving: false }]
     say(opts, opts.tone)
     return id
   },
@@ -120,6 +128,7 @@ const onFocusOut = (e: FocusEvent) => !(e.currentTarget as HTMLElement).contains
     <div :class="styles.srOnly" role="alert" aria-atomic="true">{{ urgent }}</div>
     <!-- Toasts are not part of an open dialog, but tapping one should not close it. -->
     <section
+      ref="viewport"
       :class="styles.viewport"
       data-slot="toast-viewport"
       data-gooee-layer-ignore=""

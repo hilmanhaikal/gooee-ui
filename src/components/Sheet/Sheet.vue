@@ -71,7 +71,7 @@ watch(open, (now) => hold('lock', !withDetents.value && now && lockScroll), { im
 watch(open, (now) => hold('dismiss', !withDetents.value && now && (() => dismissable(() => [panel.value], close))), { immediate: true })
 watch(
   () => !withDetents.value && open.value && mounted.value,
-  (on) => hold('trap', on && !!panel.value && (() => trapFocus(panel.value!, { initialFocus: props.initialFocus }))),
+  (on) => hold('trap', on && !!panel.value && (() => trapFocus(panel.value!, { initialFocus: props.initialFocus, modal: true }))),
   { flush: 'post', immediate: true },
 )
 const onAnimationEnd = (e: AnimationEvent) => {
@@ -143,7 +143,7 @@ watch(
         (() => {
           const el = panel.value!
           const active = document.activeElement as HTMLElement | null
-          return trapFocus(el, { initialFocus: active && el.contains(active) ? active : (props.initialFocus ?? null), restore: false })
+          return trapFocus(el, { initialFocus: active && el.contains(active) ? active : (props.initialFocus ?? null), restore: false, modal: true })
         }),
     ),
   { flush: 'post', immediate: true },

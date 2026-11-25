@@ -1,6 +1,7 @@
 import { speedTracker } from '../feel'
 import { BEND, body, budScene, exitToward, loopsPath, pincher, sdBox, trace, type Box, type Pt } from '../liquidPath'
 import { release } from './fling'
+import { focusables } from './focus'
 import { castShadow, frames, layer, morphEase, motionFor, shadowOf } from './liquidMatter'
 
 // The toast stack, the same in every framework: where each toast sits, how long it stays, the throw
@@ -17,6 +18,64 @@ const THROW_SPEED = 600
 
 let nextId = 1
 export const toastId = () => nextId++
+
+/**
+ * Keyboard reach for the toast stack, which sits apart from the page. F6 moves focus to the first toast
+ * and F6 again goes back. When the toast that holds focus leaves, focus moves to the next toast, or back
+ * where it came from, so it is never dropped on the page. Returns the undo.
+ */
+export function toastFocus(viewport: () => HTMLElement | null) {
+  let back: HTMLElement | null = null
+  let inside = false
+  const live = (el: HTMLElement) => focusables(el).filter((f) => !f.closest('[data-leaving]'))
+  const goBack = () => {
+    inside = false
+    const to = back
+    back = null
+    if (to?.isConnected) to.focus({ preventScroll: true })
+  }
+  const onKey = (e: KeyboardEvent) => {
+    const el = viewport()
+    if (e.key !== 'F6' || !el) return
+    if (el.contains(document.activeElement)) {
+      e.preventDefault()
+      return goBack()
+    }
+    const first = live(el)[0]
+    if (!first) return
+    e.preventDefault()
+    back = document.activeElement as HTMLElement | null
+    first.focus()
+  }
+  const onFocus = (e: FocusEvent) => {
+    const el = viewport()
+    const now = !!el && el.contains(e.target as Node)
+    // Tabbed in by hand: come back to where focus was before.
+    if (now && !inside && !back) back = e.relatedTarget as HTMLElement | null
+    inside = now
+    if (!now) back = null
+  }
+  // A toast starts leaving, or is gone, while it holds focus.
+  const fix = () => {
+    const el = viewport()
+    if (!el || !inside) return
+    const a = document.activeElement
+    if (a && a !== document.body && !(el.contains(a) && a.closest('[data-leaving]'))) return
+    const next = live(el)[0]
+    if (next) next.focus({ preventScroll: true })
+    else goBack()
+  }
+  const watch = new MutationObserver(fix)
+  const el = viewport()
+  if (el) watch.observe(el, { childList: true, subtree: true, attributes: true, attributeFilter: ['data-leaving'] })
+  document.addEventListener('keydown', onKey)
+  document.addEventListener('focusin', onFocus)
+  return () => {
+    watch.disconnect()
+    document.removeEventListener('keydown', onKey)
+    document.removeEventListener('focusin', onFocus)
+  }
+}
 
 /** What a screen reader hears. The same text twice is not read again, so a trailing space makes it change. */
 export function toastSay(prev: string, opts: { title?: string; description?: string }) {

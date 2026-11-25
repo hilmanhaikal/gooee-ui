@@ -25,7 +25,8 @@
 .scroll {
   overflow: auto;
   /* Room for the sticky header row and first column, so focus never lands under them. */
-  scroll-padding: var(--gooee-hit-min) 0 0 var(--first-w, 0px);
+  scroll-padding-block: var(--gooee-hit-min) 0;
+  scroll-padding-inline: var(--first-w, 0px) 0;
   /* Sideways only: a swipe at the edge must not go back a page, but the wheel still scrolls the page. */
   overscroll-behavior-x: contain;
 }
@@ -44,7 +45,7 @@
   padding: var(--gooee-space-5) var(--gooee-space-5) var(--gooee-space-3);
   font-size: var(--gooee-text-md);
   font-weight: var(--gooee-weight-semibold);
-  text-align: left;
+  text-align: start;
 }
 
 .head th {
@@ -60,14 +61,14 @@
   padding: 0 var(--gooee-space-5);
   font-size: var(--gooee-text-xs);
   font-weight: var(--gooee-weight-medium);
-  text-align: left;
+  text-align: start;
   white-space: nowrap;
   color: var(--gooee-color-fg-muted);
 }
 
 .th[data-sortable] { padding: 0 var(--gooee-space-3); }
 .th[data-align="end"],
-.td[data-align="end"] { text-align: right; }
+.td[data-align="end"] { text-align: end; }
 
 .sortButton {
   display: inline-flex;
@@ -129,6 +130,21 @@
 @media (hover: hover) {
   .row[data-selected]:hover { background: var(--gooee-color-surface-active); }
 }
+.table[data-row-action] .row { cursor: pointer; }
+
+/* The keyboard and screen reader way to open a row; a click anywhere on the row does the same. */
+.rowAction {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--gooee-radius-sm);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: inherit;
+  cursor: pointer;
+}
+.rowAction:focus-visible { outline: none; box-shadow: var(--gooee-focus-ring); }
 
 .td,
 .checkCell {
@@ -143,9 +159,9 @@
 
 .checkCell {
   width: calc(var(--gooee-hit-min) + var(--gooee-space-5));
-  padding-right: 0;
+  padding-inline-end: 0;
   /* th centres by default */
-  text-align: left;
+  text-align: start;
 }
 
 /* A group's header: its name and how many rows it holds, on a quiet band that opens a gap above it,
@@ -156,13 +172,13 @@
   background: var(--gooee-color-surface-sunken);
   font-size: var(--gooee-text-sm);
   font-weight: var(--gooee-weight-semibold);
-  text-align: left;
+  text-align: start;
 }
 
 .group:first-of-type .groupHead { padding-top: var(--gooee-space-3); }
 
 .groupCount {
-  margin-left: var(--gooee-space-3);
+  margin-inline-start: var(--gooee-space-3);
   font-size: var(--gooee-text-xs);
   font-weight: var(--gooee-weight-regular);
   color: var(--gooee-color-fg-muted);
@@ -283,7 +299,7 @@
   [data-layout="stack"] .head th { position: static; box-shadow: none; background: none; display: block; }
   [data-layout="stack"] .head th:not([data-sortable], .checkCell) { display: none; }
   /* Lines up with each card's checkbox */
-  [data-layout="stack"] .table .head .checkCell { display: block; order: 1; width: auto; height: auto; margin-left: auto; padding: 0; }
+  [data-layout="stack"] .table .head .checkCell { display: block; order: 1; width: auto; height: auto; margin-inline-start: auto; padding: 0; }
 
   [data-layout="stack"] .row {
     position: relative;
@@ -302,10 +318,10 @@
     min-height: var(--gooee-control-h-sm);
     padding: var(--gooee-space-2) 0;
     border-top: 0;
-    text-align: left;
+    text-align: start;
   }
 
-  [data-layout="stack"] .td[data-align="end"] { text-align: left; }
+  [data-layout="stack"] .td[data-align="end"] { text-align: start; }
 
   [data-layout="stack"] .td::before {
     content: attr(data-label);
@@ -317,14 +333,14 @@
   [data-layout="stack"] .table .row .checkCell {
     position: absolute;
     top: var(--gooee-space-3);
-    right: var(--gooee-space-3);
+    inset-inline-end: var(--gooee-space-3);
     width: auto;
     height: auto;
     padding: 0;
     border: 0;
   }
 
-  [data-layout="stack"] .row:has(.checkCell) .td { padding-right: var(--gooee-hit-min); }
+  [data-layout="stack"] .row:has(.checkCell) .td { padding-inline-end: var(--gooee-hit-min); }
 }
 
 /* layout="scroll": the table keeps its columns and scrolls sideways when it is wider than its
@@ -341,7 +357,7 @@
 /* The first column stays in place while the rest scrolls, so each row keeps its name. */
 [data-layout="scroll"] tr > :first-child {
   position: sticky;
-  left: 0;
+  inset-inline-start: 0;
   z-index: 1;
   background: var(--gooee-color-surface);
 }
@@ -358,6 +374,17 @@
     inset 0 calc(var(--gooee-line) * -1) 0 var(--gooee-color-border);
 }
 
+/* On a right-to-left page the first column sits at the right, so its edge line is on its left. */
+[data-layout="scroll"][data-more-start] tr > :first-child:dir(rtl) {
+  box-shadow: inset var(--gooee-line) 0 0 var(--gooee-color-border);
+}
+
+[data-layout="scroll"][data-more-start] .head tr > :first-child:dir(rtl) {
+  box-shadow:
+    inset var(--gooee-line) 0 0 var(--gooee-color-border),
+    inset 0 calc(var(--gooee-line) * -1) 0 var(--gooee-color-border);
+}
+
 [data-layout="scroll"] .row[data-selected] > :first-child { background: var(--gooee-color-surface-sunken); }
 
 @media (hover: hover) {
@@ -370,7 +397,7 @@
   content: "";
   position: absolute;
   top: 0;
-  right: 0;
+  inset-inline-end: 0;
   bottom: 0;
   width: var(--gooee-space-8);
   background: linear-gradient(to right, transparent, var(--gooee-color-surface));
@@ -380,4 +407,5 @@
 }
 
 [data-layout="scroll"][data-more-end]::after { opacity: 1; }
+[data-layout="scroll"]:dir(rtl)::after { background: linear-gradient(to left, transparent, var(--gooee-color-surface)); }
 }

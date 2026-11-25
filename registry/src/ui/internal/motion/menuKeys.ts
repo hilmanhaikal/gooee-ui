@@ -4,8 +4,15 @@
 /** What the keys need from a key event: native and React events both have these. */
 export type KeyLike = { key: string; preventDefault(): void }
 
-/** The items focus can land on: disabled ones are skipped. */
-export const menuItems = (root: HTMLElement | null) => Array.from(root?.querySelectorAll<HTMLElement>('[role="menuitem"]:not([aria-disabled="true"])') ?? [])
+/** The items focus can land on, checkable ones too: disabled ones are skipped. */
+export const menuItems = (root: HTMLElement | null) =>
+  Array.from(root?.querySelectorAll<HTMLElement>(':is([role="menuitem"], [role="menuitemcheckbox"], [role="menuitemradio"]):not([aria-disabled="true"])') ?? [])
+
+/** Left and Right swap on a right-to-left page, so "into a submenu" always points the way the text reads. */
+export function logicalKey(key: string, el: Element | null) {
+  if ((key !== 'ArrowLeft' && key !== 'ArrowRight') || !el || getComputedStyle(el).direction !== 'rtl') return key
+  return key === 'ArrowLeft' ? 'ArrowRight' : 'ArrowLeft'
+}
 
 /** Down or Up on the menu button opens the menu at its first or last item. */
 export function menuButtonKey(e: KeyLike): 'first' | 'last' | null {
@@ -35,7 +42,9 @@ export function createTypeahead() {
 export function createMenuKeys(root: () => HTMLElement | null, onTab: () => void) {
   const typeahead = createTypeahead()
   return (e: KeyLike) => {
-    const list = menuItems(root())
+    // Only this menu's items: a submenu inside handles its own keys.
+    const menu = root()
+    const list = menuItems(menu).filter((el) => el.closest('[role="menu"]') === menu)
     const i = list.indexOf(document.activeElement as HTMLElement)
     const go = (n: number) => {
       e.preventDefault()
