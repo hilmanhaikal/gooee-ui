@@ -24,6 +24,10 @@
   flex: none;
   margin: 0;
   border-radius: 0;
+  /* Joined buttons share one outline, so hover and press change the fill but never move an edge. */
+  --gooee-press-depth: 0px;
+  --gooee-press-scale: 1;
+  --gooee-press-scale-strong: 1;
 }
 
 /* Neighbours overlap by one line, so two borders read as one. */

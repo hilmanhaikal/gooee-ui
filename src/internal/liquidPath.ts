@@ -50,25 +50,28 @@ export function boxPath(b: Box) {
 }
 
 /** Points every `step` px round a box's outline, each with its outward normal. */
-export function boxRing(b: Box, step: number): Array<[number, number, number, number]> {
-  const r = Math.min(b.r, b.hw, b.hh)
+export function boxRing(b: Box & { corners?: [number, number, number, number] }, step: number): Array<[number, number, number, number]> {
+  // Corners go top-left, top-right, bottom-right, bottom-left, as CSS reads them. A button in a group
+  // has round outer corners and square inner ones.
+  const [tl, tr, br, bl] = (b.corners ?? [b.r, b.r, b.r, b.r]).map((r) => Math.max(0, Math.min(r, b.hw, b.hh)))
   const x = b.cx - b.hw
   const y = b.cy - b.hh
   const w = b.hw * 2
   const h = b.hh * 2
-  const st = w - 2 * r
-  const sv = h - 2 * r
-  const q = (Math.PI * r) / 2
-  const arc = (cx: number, cy: number, a: number): [number, number, number, number] => [cx + Math.cos(a) * r, cy + Math.sin(a) * r, Math.cos(a), Math.sin(a)]
+  const q = (r: number) => (Math.PI * r) / 2
+  const arc = (cx: number, cy: number, r: number, a: number, s: number): [number, number, number, number] => {
+    const t = a + (r ? s / r : 0)
+    return [cx + Math.cos(t) * r, cy + Math.sin(t) * r, Math.cos(t), Math.sin(t)]
+  }
   const pieces: Array<[number, (s: number) => [number, number, number, number]]> = [
-    [st, (s) => [x + r + s, y, 0, -1]],
-    [q, (s) => arc(x + w - r, y + r, -Math.PI / 2 + s / r)],
-    [sv, (s) => [x + w, y + r + s, 1, 0]],
-    [q, (s) => arc(x + w - r, y + h - r, s / r)],
-    [st, (s) => [x + w - r - s, y + h, 0, 1]],
-    [q, (s) => arc(x + r, y + h - r, Math.PI / 2 + s / r)],
-    [sv, (s) => [x, y + h - r - s, -1, 0]],
-    [q, (s) => arc(x + r, y + r, Math.PI + s / r)],
+    [w - tl - tr, (s) => [x + tl + s, y, 0, -1]],
+    [q(tr), (s) => arc(x + w - tr, y + tr, tr, -Math.PI / 2, s)],
+    [h - tr - br, (s) => [x + w, y + tr + s, 1, 0]],
+    [q(br), (s) => arc(x + w - br, y + h - br, br, 0, s)],
+    [w - br - bl, (s) => [x + w - br - s, y + h, 0, 1]],
+    [q(bl), (s) => arc(x + bl, y + h - bl, bl, Math.PI / 2, s)],
+    [h - bl - tl, (s) => [x, y + h - bl - s, -1, 0]],
+    [q(tl), (s) => arc(x + tl, y + tl, tl, Math.PI, s)],
   ]
   const total = pieces.reduce((a, p) => a + p[0], 0)
   const n = Math.max(8, Math.round(total / step))

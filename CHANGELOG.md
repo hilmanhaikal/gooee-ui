@@ -2,6 +2,20 @@
 
 What changed in Gooee UI for people who use it: components, blocks, templates, themes, tokens and the `npx gooee add` command. Newest first.
 
+## 1.6.1 · November 2026
+
+New docs demos for 1.6.0, a ButtonGroup that keeps one outline, and a bigger tap area on Table's row button.
+
+### Added
+
+- Docs: seven demos for 1.6.0, in React and Vue, each with a guide. Select with groups and icons, Combobox with every time zone, MultiSelect fed by a server, DropdownMenu with checks, choices and a submenu, AlertDialog that waits for the server, Table rows that open, and DataGrid loading 240 orders 30 at a time.
+
+### Fixed
+
+- ButtonGroup: hovering or pressing a button no longer breaks the group's outline. The soft edge read only the top-left corner, so the first button drew round on all four sides and the last one square, and its edge moved off the shared border. It now follows each corner, and inside a group hover and press change the fill only. An IconButton in a group no longer shrinks on press.
+- Button: the soft edge sits on the button's exact size. It used whole pixels, so a 127.4px button drew a 127px edge.
+- Table: with `onRowAction`, the row button in the first column is now as tall as the row to tap, at least 44px. It was only as tall as its text, about 24px. The row looks the same.
+
 ## 1.6.0 · November 2026
 
 Deeper parts for real apps: server-fed grids, option lists in the thousands, one menu model, async confirm, close reasons, and right-to-left pages.

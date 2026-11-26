@@ -144,7 +144,10 @@
   font: inherit;
   text-align: inherit;
   cursor: pointer;
+  position: relative;
 }
+/* The text is short, so the tap area grows to the row's full height. */
+.rowAction::after { content: ""; position: absolute; inset-inline: 0; inset-block: min(0px, calc((100% - var(--gooee-hit-min)) / 2)); }
 .rowAction:focus-visible { outline: none; box-shadow: var(--gooee-focus-ring); }
 
 .td,

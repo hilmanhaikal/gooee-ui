@@ -32,6 +32,16 @@ type Live = {
   meet: number
 }
 
+// offsetWidth rounds to whole pixels, so a 120.6px button would get an edge drawn at 121px.
+const sizeOf = (el: HTMLElement): [number, number] => {
+  const cs = getComputedStyle(el)
+  const add = (...v: string[]) => (cs.boxSizing === 'content-box' ? v.reduce((a, x) => a + (parseFloat(x) || 0), 0) : 0)
+  return [
+    parseFloat(cs.width) + add(cs.paddingLeft, cs.paddingRight, cs.borderLeftWidth, cs.borderRightWidth),
+    parseFloat(cs.height) + add(cs.paddingTop, cs.paddingBottom, cs.borderTopWidth, cs.borderBottomWidth),
+  ]
+}
+
 const fine = () => window.matchMedia('(hover: hover) and (pointer: fine)').matches
 
 export type SoftPressOptions = {
@@ -76,13 +86,12 @@ export function createSoftPress(o: SoftPressOptions) {
   // as a label that changes on click.
   const fit = (L: Pick<Live, 'el' | 'svg'>) => {
     const { el, svg } = L
-    const w = el.offsetWidth
-    const h = el.offsetHeight
+    const [w, h] = sizeOf(el)
     const css = getComputedStyle(el)
     const line = parseFloat(css.borderTopWidth) || 0
-    const r = Math.min(h / 2, parseFloat(css.borderTopLeftRadius) || 0)
-    const outer = boxRing({ cx: w / 2, cy: h / 2, hw: w / 2, hh: h / 2, r }, 1)
-    const inner = boxRing({ cx: w / 2, cy: h / 2, hw: w / 2 - line, hh: h / 2 - line, r: Math.max(0, r - line) }, 1)
+    const corners = [css.borderTopLeftRadius, css.borderTopRightRadius, css.borderBottomRightRadius, css.borderBottomLeftRadius].map((c) => Math.min(h / 2, parseFloat(c) || 0)) as [number, number, number, number]
+    const outer = boxRing({ cx: w / 2, cy: h / 2, hw: w / 2, hh: h / 2, r: 0, corners }, 1)
+    const inner = boxRing({ cx: w / 2, cy: h / 2, hw: w / 2 - line, hh: h / 2 - line, r: 0, corners: corners.map((r) => Math.max(0, r - line)) as typeof corners }, 1)
     svg.setAttribute('width', String(w))
     svg.setAttribute('height', String(h))
     let len = 0
@@ -152,7 +161,8 @@ export function createSoftPress(o: SoftPressOptions) {
     s.raf = 0
     const L = s.live
     if (!L) return
-    if (L.el.offsetWidth !== L.w || L.el.offsetHeight !== L.h) Object.assign(L, fit(L))
+    const [w, h] = sizeOf(L.el)
+    if (w !== L.w || h !== L.h) Object.assign(L, fit(L))
     const dt = Math.max(0, now - s.last)
     s.last = now
     const e = morphEase()
@@ -202,7 +212,8 @@ export function createSoftPress(o: SoftPressOptions) {
       }
     }
     L.wet.style.display = wetOn ? '' : 'none'
-    const shape = { dent: s.dent, at: s.at, pull: s.pull, to: s.to, wave, run, from: s.wave?.from ?? [] }
+    // The hover pull is half the dent, so a depth of 0 keeps every edge still (a button inside a group).
+    const shape = { dent: s.dent, at: s.at, pull: (s.pull * depth) / 2, to: s.to, wave, run, from: s.wave?.from ?? [] }
     if (!s.dent && !s.pull && !wave && !wetOn && !s.held && !s.press && !s.pullAim) {
       teardown()
       return
@@ -283,8 +294,7 @@ export function createSoftPress(o: SoftPressOptions) {
     if (o.inert || e.pointerType !== 'mouse' || !fine() || prefersReducedMotion() || s.held) return
     const el = e.currentTarget as HTMLElement
     const [x, y] = local(el, e.clientX, e.clientY)
-    const w = el.offsetWidth
-    const h = el.offsetHeight
+    const [w, h] = sizeOf(el)
     // Strongest at the edge, less toward the middle.
     const edge = Math.min(x, w - x, y, h - y)
     s.pullAim = Math.exp(-(edge * edge) / (2 * (h * 0.58) ** 2))
@@ -299,7 +309,8 @@ export function createSoftPress(o: SoftPressOptions) {
   const keyDown = (e: KeyLike) => {
     if (o.inert || e.repeat || !o.keys.includes(e.key)) return
     const el = e.currentTarget as HTMLElement
-    press(el, [el.offsetWidth / 2, el.offsetHeight / 2], true)
+    const [w, h] = sizeOf(el)
+    press(el, [w / 2, h / 2], true)
   }
   const keyUp = (e: KeyLike) => {
     if (o.keys.includes(e.key) && s.byKey) release()
