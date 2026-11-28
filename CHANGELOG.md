@@ -2,6 +2,37 @@
 
 What changed in Gooee UI for people who use it: components, blocks, templates, themes, tokens and the `npx gooee add` command. Newest first.
 
+## 1.7.0 · November 2026
+
+Every block and template is now a real product, Sparkline can be scrubbed, and a round of fixes to fields, menus and focus.
+
+### Added
+
+- Sparkline: `scrub` lets people drag or use the arrow keys along the line to read any day. A dot rides the line, `onScrub` (`@scrub` in Vue) gets the point, and `formatPoint` sets what screen readers hear.
+- PhoneInput: `placeholder` shows an example number after the fixed +60, such as `12-345 6789`.
+- Presets: Slate, Forest, Clay and Plum are now free colour presets, in a `presets/` folder. Glass and the two density presets stay in Pro.
+
+### Changed
+
+- Sparkline: the line keeps an honest range, so a small change no longer fills the whole height. The latest value is a calm 8px dot, and the area fill is lighter.
+- Blocks and templates: each one is now a real product with its own name, people shown by role, real details and licensed photos, such as a ferry line's sailings desk, a darkroom co-op's admin and a piano tuner's app.
+- Docs: a new homepage. Under the headline, a working bouldering gym app built from real parts: filter its routes, pick a route on the table or on the wall photo, and plan a reset in a dialog. A theme picker flows Default, Forest, Clay and Slate into it. Then the places, why Gooee, live parts, what `add` writes, what your editor gets from the MCP server, how a release is checked, what it costs and short answers.
+- Docs: search sits in the top bar, with ⌘K. On a phone the bar has a search button and a menu, and a row under it names the section you are reading. The floating bar at the bottom is gone.
+- Docs: block and template previews sit in a frame, like a screen on a stage, and are at most one window tall. A longer page scrolls inside it.
+- Docs: smaller headings across the site.
+
+### Fixed
+
+- NumberInput: the hover fill of the − and + buttons no longer covers the field's outline. The buttons now sit 4px inside the field, and their tap area is still 44px.
+- PinInput: once every box is filled, an extra key no longer replaces the last character. Click a box, or use Backspace, to change it.
+- InlineEdit: the hover fill hugs the words instead of the whole row, and keeps clear of the line under it.
+- Select: when options have a line of detail, the list is at least 320px wide, so a narrow field no longer squeezes it. It never goes past the screen edge.
+- Popover, Select and menus follow their trigger when it keeps moving after a scroll, such as a button in a floating Navbar.
+- Popover and other panels with only a close button no longer open with a focus ring on that button. Focus goes to the panel.
+- Navbar: with `float`, the bar no longer rests halfway between the full bar and the pill when the scroll stops. It glides to the nearer one. The menu card under the pill has the same gap on every side.
+- Link: the arrow of an external link stays on the line in running text.
+- Checkbox: a long description uses the full width next to a short label.
+
 ## 1.6.1 · November 2026
 
 New docs demos for 1.6.0, a ButtonGroup that keeps one outline, and a bigger tap area on Table's row button.

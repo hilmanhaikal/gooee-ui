@@ -1,0 +1,29 @@
+@layer gooee.themes {
+/* Forest: a deep green accent.
+   Load after tokens.css. Apply with data-theme-brand="forest" on <html> or on a wrapper.
+   Charts keep their own colours, so the accent never sits next to a near twin. */
+:root[data-theme-brand="forest"],
+[data-theme-brand="forest"] {
+  --gooee-color-accent: #1f5c3f;
+  --gooee-color-accent-fg: #ffffff;
+  --gooee-color-accent-hover: #15452f;
+}
+
+/* Dark (system) */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"])[data-theme-brand="forest"],
+  :root:not([data-theme="light"]) [data-theme-brand="forest"] {
+    --gooee-color-accent: #8ccfa9;
+    --gooee-color-accent-fg: #0a0a0a;
+    --gooee-color-accent-hover: #addfc3;
+  }
+}
+
+/* Dark (forced) */
+:root[data-theme="dark"][data-theme-brand="forest"],
+:root[data-theme="dark"] [data-theme-brand="forest"] {
+  --gooee-color-accent: #8ccfa9;
+  --gooee-color-accent-fg: #0a0a0a;
+  --gooee-color-accent-hover: #addfc3;
+}
+}

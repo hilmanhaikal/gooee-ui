@@ -1,0 +1,33 @@
+@layer gooee.themes {
+/* Slate: a cool grey-blue accent and softer square corners.
+   Load after tokens.css. Apply with data-theme-brand="slate" on <html> or on a wrapper.
+   Charts keep their own colours, so the accent never sits next to a near twin. */
+:root[data-theme-brand="slate"],
+[data-theme-brand="slate"] {
+  --gooee-color-accent: #3d4f66;
+  --gooee-color-accent-fg: #ffffff;
+  --gooee-color-accent-hover: #2b3a4e;
+  --gooee-radius-control: 10px;
+  --gooee-radius-panel: 16px;
+  --gooee-radius-md: 10px;
+  --gooee-radius-sm: 6px;
+}
+
+/* Dark (system) */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"])[data-theme-brand="slate"],
+  :root:not([data-theme="light"]) [data-theme-brand="slate"] {
+    --gooee-color-accent: #a9bad0;
+    --gooee-color-accent-fg: #0a0a0a;
+    --gooee-color-accent-hover: #c5d2e3;
+  }
+}
+
+/* Dark (forced) */
+:root[data-theme="dark"][data-theme-brand="slate"],
+:root[data-theme="dark"] [data-theme-brand="slate"] {
+  --gooee-color-accent: #a9bad0;
+  --gooee-color-accent-fg: #0a0a0a;
+  --gooee-color-accent-hover: #c5d2e3;
+}
+}

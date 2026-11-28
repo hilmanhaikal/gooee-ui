@@ -1,0 +1,30 @@
+@layer gooee.themes {
+/* Clay: a warm terracotta accent and rounded corners in place of pills.
+   Load after tokens.css. Apply with data-theme-brand="clay" on <html> or on a wrapper.
+   Charts keep their own colours, so the accent never sits next to a near twin. */
+:root[data-theme-brand="clay"],
+[data-theme-brand="clay"] {
+  --gooee-color-accent: #9e4529;
+  --gooee-color-accent-fg: #ffffff;
+  --gooee-color-accent-hover: #80361f;
+  --gooee-radius-control: 14px;
+}
+
+/* Dark (system) */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"])[data-theme-brand="clay"],
+  :root:not([data-theme="light"]) [data-theme-brand="clay"] {
+    --gooee-color-accent: #e9a184;
+    --gooee-color-accent-fg: #0a0a0a;
+    --gooee-color-accent-hover: #f2bda7;
+  }
+}
+
+/* Dark (forced) */
+:root[data-theme="dark"][data-theme-brand="clay"],
+:root[data-theme="dark"] [data-theme-brand="clay"] {
+  --gooee-color-accent: #e9a184;
+  --gooee-color-accent-fg: #0a0a0a;
+  --gooee-color-accent-hover: #f2bda7;
+}
+}

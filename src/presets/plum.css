@@ -1,0 +1,29 @@
+@layer gooee.themes {
+/* Plum: a muted plum accent.
+   Load after tokens.css. Apply with data-theme-brand="plum" on <html> or on a wrapper.
+   Charts keep their own colours, so the accent never sits next to a near twin. */
+:root[data-theme-brand="plum"],
+[data-theme-brand="plum"] {
+  --gooee-color-accent: #6a3d63;
+  --gooee-color-accent-fg: #ffffff;
+  --gooee-color-accent-hover: #532f4d;
+}
+
+/* Dark (system) */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"])[data-theme-brand="plum"],
+  :root:not([data-theme="light"]) [data-theme-brand="plum"] {
+    --gooee-color-accent: #d5aacd;
+    --gooee-color-accent-fg: #0a0a0a;
+    --gooee-color-accent-hover: #e4c5df;
+  }
+}
+
+/* Dark (forced) */
+:root[data-theme="dark"][data-theme-brand="plum"],
+:root[data-theme="dark"] [data-theme-brand="plum"] {
+  --gooee-color-accent: #d5aacd;
+  --gooee-color-accent-fg: #0a0a0a;
+  --gooee-color-accent-hover: #e4c5df;
+}
+}

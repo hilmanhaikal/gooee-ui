@@ -257,6 +257,7 @@ export function Select({
             tabIndex={-1}
             className={styles.list}
             data-slot="select-list"
+            data-hints={options.some((o) => o.hint) || undefined}
             data-state={state}
             data-side={side}
             style={style}

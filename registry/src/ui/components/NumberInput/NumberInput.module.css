@@ -20,7 +20,8 @@
   width: var(--gooee-number-input-w, 168px);
   max-width: 100%;
   min-height: var(--gooee-hit-min);
-  padding: 0;
+  /* The steppers sit 4px inside the line, so their hover fill never covers it. Both are pills, so the corners nest. */
+  padding: var(--gooee-space-2);
   /* The line width lives in --edge, so the padding gives it back and the words stay put when it thickens. */
   --edge: var(--gooee-line);
   /* The line is drawn inside the edge and takes no space, so the outer size is the content's own 4px steps. */
@@ -50,8 +51,8 @@
   display: grid;
   place-items: center;
   flex: none;
-  width: var(--gooee-hit-min);
-  height: var(--gooee-hit-min);
+  width: calc(var(--gooee-hit-min) - var(--gooee-space-2) * 2);
+  height: calc(var(--gooee-hit-min) - var(--gooee-space-2) * 2);
   padding: 0;
   border: 0;
   border-radius: var(--gooee-radius-full);
@@ -71,8 +72,10 @@
   .step:hover:not(:disabled) { background: var(--gooee-color-surface-hover); }
 }
 .step:active:not(:disabled) { transform: scale(var(--gooee-press-scale-strong)); transition-duration: var(--gooee-motion-instant); }
-/* The press shrinks the button, so an invisible layer keeps the whole box under a mouse released at its edge. */
-.step:active:not(:disabled)::after { content: ""; position: absolute; inset: -9%; }
+/* The tap area reaches the field's edge (44px), and grows a little more while the press shrinks the button,
+   so a finger or mouse released at its edge still lands on it. */
+.step::after { content: ""; position: absolute; inset: calc(var(--gooee-space-2) * -1); }
+.step:active:not(:disabled)::after { inset: calc(var(--gooee-space-2) * -1 - 9%); }
 .step:disabled { color: var(--gooee-color-fg-disabled); cursor: not-allowed; }
 
 .control {

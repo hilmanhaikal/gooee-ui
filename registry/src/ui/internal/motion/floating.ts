@@ -14,7 +14,8 @@ export function place(anchor: HTMLElement | null, floating: HTMLElement | null, 
   if (!anchor || !floating) return null
   const r = anchor.getBoundingClientRect()
   const width = matchWidth ? r.width : undefined
-  const fw = width ?? floating.offsetWidth
+  // A matched list can still be wider than its anchor (a CSS min-width), so the real width keeps it on screen.
+  const fw = Math.max(width ?? 0, floating.offsetWidth)
   const fh = floating.offsetHeight
   const vw = window.innerWidth
   const vh = window.innerHeight
@@ -45,11 +46,30 @@ export function follow(anchor: HTMLElement | null, floating: HTMLElement | null,
   const ro = new ResizeObserver(update)
   if (floating) ro.observe(floating)
   if (anchor) ro.observe(anchor)
-  window.addEventListener('scroll', update, true)
+  // A scroll can move the anchor for a while after it ends (a bar that eases into a pill), so keep
+  // following each frame until the anchor has stayed put for a few frames.
+  let raf = 0
+  let still = 0
+  let last = ''
+  const frame = () => {
+    const r = anchor?.getBoundingClientRect()
+    const at = r ? `${r.left},${r.top},${r.width}` : ''
+    still = at === last ? still + 1 : 0
+    last = at
+    update()
+    raf = still > 8 ? 0 : requestAnimationFrame(frame)
+  }
+  const onScroll = () => {
+    update()
+    still = 0
+    if (!raf) raf = requestAnimationFrame(frame)
+  }
+  window.addEventListener('scroll', onScroll, true)
   window.addEventListener('resize', update)
   return () => {
     ro.disconnect()
-    window.removeEventListener('scroll', update, true)
+    cancelAnimationFrame(raf)
+    window.removeEventListener('scroll', onScroll, true)
     window.removeEventListener('resize', update)
   }
 }

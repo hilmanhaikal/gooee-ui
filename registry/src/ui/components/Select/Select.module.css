@@ -128,6 +128,9 @@
 
 .list[data-side="top"] { transform-origin: bottom center; }
 
+/* Options with a line of detail need room to read: the list may grow past a narrow field, never past the screen. */
+.list[data-hints] { min-width: min(var(--gooee-panel-w-sm), calc(100vw - var(--gooee-space-5) * 2)); }
+
 .list[data-state="closed"] {
   animation: listOut var(--gooee-motion-fast) var(--gooee-ease-morph) forwards;
   pointer-events: none;

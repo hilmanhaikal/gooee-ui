@@ -89,9 +89,10 @@ export function inertOutside(root: HTMLElement) {
 export function trapFocus(root: HTMLElement, { initialFocus, restore = true, modal = false }: { initialFocus?: HTMLElement | null; restore?: boolean; modal?: boolean } = {}) {
   const previous = returnTarget()
   const release = modal ? inertOutside(root) : () => {}
-  // Close buttons opt out of first focus, so focus lands on the content or the safe action.
+  // Close buttons opt out of first focus, so focus lands on the content or the safe action. With only a close
+  // button inside, a panel that can take focus takes it, or the close button would open with a focus ring.
   const list = focusables(root)
-  const first = initialFocus ?? list.find((el) => !el.hasAttribute('data-skip-initial-focus')) ?? list[0] ?? root
+  const first = initialFocus ?? list.find((el) => !el.hasAttribute('data-skip-initial-focus')) ?? (root.hasAttribute('tabindex') ? root : list[0]) ?? root
   first.focus({ preventScroll: true })
 
   // Safari's plain Tab skips buttons, so it can jump from the middle of the layer to the page behind,

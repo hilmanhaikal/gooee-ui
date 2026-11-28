@@ -257,6 +257,7 @@ const describedBy = computed(
         tabindex="-1"
         :class="styles.list"
         data-slot="select-list"
+        :data-hints="options.some((o) => o.hint) || undefined"
         :data-state="state"
         :data-side="side"
         :style="style"
